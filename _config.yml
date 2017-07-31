@@ -2,7 +2,7 @@
 title: WangJace
 description: iOS开发者，喜欢技术专研，运动爱好者
 url: 'http://wangjace.github.io/' 
-#baseurl: '/'
+baseurl: '/'
 domain: 'http://blog.wangjace.site/'
 # google_analytics: 'UA-XXXXXX-X'
 
@@ -15,94 +15,20 @@ author:
   description: WangJace's Blog
 
 # Build settings
-#destination: _site
+destination: _site
 # Gems
-#gems: [jekyll-paginate]
+gems: [jekyll-paginate]
 paginate: 10
-#permalink: /:year/:title/
-#markdown: kramdown
+permalink: /:year/:title/
+markdown: kramdown
 rouge: pygments
-#highlighter: rouge
-
-#kramdown:
-  # use Github Flavored Markdown
-  #input: GFM
-  # do not replace newlines by <br>s
-  #hard_wrap: false
-  #auto_ids: true
-
-#exclude: ['README.md', 'Gemfile', 'Gemfile.lock', 'screenshot.png']
-
-#######################################################################
-
-# Where things are 目录结构
-source:       .             # 修改 Jekyll 读取文件的路径
-destination:  _site         # 修改 Jekyll 写入文件的路径
-plugins_dir:  _plugins
-layouts_dir:  _layouts
-data_dir:     _data
-includes_dir: _includes
-collections:
-  posts:
-    output:   true
-
-# Handling Reading 阅读处理
-safe:         false             # 禁用 自定义插件
-include:      [".htaccess"]     # 转换时强制包含某些文件、文件夹。.htaccess 是个典型的例子，因为默认排除 . 开头的文件。
-exclude:      ["node_modules", "vendor/bundle/", "vendor/cache/", "vendor/gems/", "vendor/ruby/", 'README.md', 'Gemfile', 'Gemfile.lock', 'screenshot.png']                # 转换时排除某些文件、文件夹
-keep_files:   [".git", ".svn"]  # 当生成站点时，保留选择的文件。对文件不是由 jekyll 生成是有用的。例如由你的构建工具生成的文件或者资源。路径是相对于 destination 。
-encoding:     "utf-8"           # 设置文件的编码，仅 Ruby 1.9 以上可用。2.0.0　版本以后默认值为 utf-8，之前版本默认值为 nil，使用 Ruby 默认的 ASCII-8BIT。可以用命令 ruby -e 'puts Encoding::list.join("\n")' 查看 Ruby 可用的编码。
-markdown_ext: "markdown,mkdown,mkdn,mkd,md"
-
-# Filtering Content 内容过滤
-show_drafts: null
-limit_posts: 0         # 限制文章的数量
-future:      false     # 用将来的日期发布文章
-unpublished: false
-
-# Plugins 插件
-whitelist: []
-gems:      [jekyll-paginate]
-
-# Conversion 转换
-markdown:    kramdown
 highlighter: rouge
-lsi:         false            # 为相关文章生成索引
-excerpt_separator: "\n\n"
-incremental: false            # 启用实验特性 incremental build。Incremental build 只重建修改过的 posts 和 pages，对大型网站有显著的性能提升，但在特定情况下也会影响网站生成。
-
-# Serving 服务器选项
-detach:  false          # 从终端命令行中分离出来
-port:    4000           # 监听所给的端口
-host:    127.0.0.1      # 监听所给的主机名
-baseurl: "/"            # 网站的根路径does not include hostname
-show_dir_listing: false
-
-# Outputting 输出
-permalink:     date
-#paginate_path: /page:num
-timezone:      null     # 设置时区，这个设置作用于 TZ 变量， Ruby 用它来处理日期和时间。 IANA Time Zone Database 里边的都有效，比如 America/New_York 。默认值为操作系统的时区。
-
-quiet:    false     # 在编译期间不显示的正常输出。
-verbose:  false     # 显示详细输出
-defaults: []        # 设置 YAML 头信息 的默认值。
-
-liquid:             # 生成一个Liquid概述文档来帮助你发现性能瓶颈
-  error_mode: warn  # lax — 忽略所有错误; warn — 针对每个错误在控制台中输出警告信息; strict — 输出错误信息并停止构建过程
-
-# Markdown Processors Markdown 处理器
-rdiscount:
-  extensions: []
-
-redcarpet:     # Redcarpet支持设置 extensions ，值为一个字符串数组，每个字符串都是 Redcarpet::Markdown 类的扩展，相应的扩展就会设置为 true 。
-  extensions: []
 
 kramdown:
-  auto_ids:       true
-  footnote_nr:    1
-  entity_output:  as_char
-  toc_levels:     1..6
-  smart_quotes:   lsquo,rsquo,ldquo,rdquo
-  input:          GFM     # use Github Flavored Markdown
-  hard_wrap:      false   # do not replace newlines by <br>s
-  footnote_nr:    1
+  # use Github Flavored Markdown
+  input: GFM
+  # do not replace newlines by <br>s
+  hard_wrap: false
+  auto_ids: true
+
+exclude: ['README.md', 'Gemfile', 'Gemfile.lock', 'screenshot.png']
