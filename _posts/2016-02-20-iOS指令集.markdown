@@ -1,0 +1,27 @@
+---
+layout: post
+title:  "iOS指令集"
+date:   2016-02-20 18:04:23
+categories: Jace update
+comments: true
+tags: [iOS杂碎]
+---   
++ armv6    
+iPhone, iPhone2, iPhone3G, 第一代、第二代 iPod Touch
+
++ armv7    
+iPhone3GS, iPhone4, iPhone4S    
+iPad, iPad2, iPad3(The New iPad), iPad mini    
+iPod Touch 3G, iPod Touch4    
++ armv7s     
+iPhone5, iPhone5C, iPad4(iPad with Retina Display)    
++ arm64    
+iPhone5S, iPad Air, iPad mini2(iPad mini with Retina Display)    
++ armv8    
+iPhone6, iPhone6 Plus, iPhone6S, iPhone6S Plus
+
+[iOS杂碎]:http://jekyllrb.com
+
+
+
+

@@ -1,0 +1,46 @@
+---
+layout: post
+title:  "修改Xcode项目工程名"
+date:   2016-08-06 23:26:23
+categories: Jace update
+comments: true
+tags: [iOS 开发随记]
+---    
+在iOS开发过程中，偶尔会遇到需要修改整个项目的工程名的需求。我在开发过程中也遇到了，本文整理了修改一个Xcode项目工程名的过程。    
+**写在前面的提醒：为了避免工程在改完工程名后运行不了又无法回滚，强烈建议在修改工程名之前先备份整个工程**
+
+第一步，打开Xcode工程，选中工程文件，按下图操作    
+![Step1][image-1]    
+当输入完，单击Enter的时候，会弹出一个提示窗，如下图，单击Rename    
+![Step2][image-2]    
+第二步，修改工程的根目录文件夹名称    
+![Step3][image-3]
+![Step4][image-4]    
+如果在修改文件夹名称的时候，工程是打开状态，则会弹出下列提示窗，直接点击close就行    
+![Step5][image-5]    
+第三步，回到工程中，会发现工程目录下的文件都变成红色的了，不怕，请继续往下看    
+![Step6][image-6]
+![Step7][image-7]    
+第四步，重新设置工程的配置文件    
+![Step8][image-8]
+![Step9][image-9]    
+第五步，将Build Settings中出现旧工程名的地方改为新工程名    
+第六步，修改Schemes的名称    
+![Step10][image-10]
+![Step11][image-11]    
+OK，运行编译。
+
+[image-1]:	%7B%7Bsite.domain%7D%7Dimages/article_images/2016-08-06-%E4%BF%AE%E6%94%B9Xcode%E5%B7%A5%E7%A8%8B%E5%90%8D01.png
+[image-2]:	%7B%7Bsite.domain%7D%7D/images/article_images/2016-08-06-%E4%BF%AE%E6%94%B9Xcode%E5%B7%A5%E7%A8%8B%E5%90%8D02.png
+[image-3]:	%7B%7Bsite.domain%7D%7D/images/article_images/2016-08-06-%E4%BF%AE%E6%94%B9Xcode%E5%B7%A5%E7%A8%8B%E5%90%8D03.png
+[image-4]:	%7B%7Bsite.domain%7D%7D/images/article_images/2016-08-06-%E4%BF%AE%E6%94%B9Xcode%E5%B7%A5%E7%A8%8B%E5%90%8D04.png
+[image-5]:	%7B%7Bsite.domain%7D%7D/images/article_images/2016-08-06-%E4%BF%AE%E6%94%B9Xcode%E5%B7%A5%E7%A8%8B%E5%90%8D05.png
+[image-6]:	%7B%7Bsite.domain%7D%7D/images/article_images/2016-08-06-%E4%BF%AE%E6%94%B9Xcode%E5%B7%A5%E7%A8%8B%E5%90%8D06.png
+[image-7]:	%7B%7Bsite.domain%7D%7D/images/article_images/2016-08-06-%E4%BF%AE%E6%94%B9Xcode%E5%B7%A5%E7%A8%8B%E5%90%8D07.png
+[image-8]:	%7B%7Bsite.domain%7D%7D/images/article_images/2016-08-06-%E4%BF%AE%E6%94%B9Xcode%E5%B7%A5%E7%A8%8B%E5%90%8D08.png
+[image-9]:	%7B%7Bsite.domain%7D%7D/images/article_images/2016-08-06-%E4%BF%AE%E6%94%B9Xcode%E5%B7%A5%E7%A8%8B%E5%90%8D09.png
+[image-10]:	%7B%7Bsite.domain%7D%7D/images/article_images/2016-08-06-%E4%BF%AE%E6%94%B9Xcode%E5%B7%A5%E7%A8%8B%E5%90%8D10.png
+[image-11]:	%7B%7Bsite.domain%7D%7D/images/article_images/2016-08-06-%E4%BF%AE%E6%94%B9Xcode%E5%B7%A5%E7%A8%8B%E5%90%8D11.png
+
+[iOS 开发随记]:http://jekyllrb.com
+

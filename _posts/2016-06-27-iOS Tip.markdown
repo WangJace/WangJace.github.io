@@ -1,0 +1,35 @@
+---
+layout: post
+title:  "iOS Tip"
+date:   2016-06-27 11:26:23
+categories: Jace update
+comments: true
+tags: [iOS 开发Tip]
+---
++ iOS APP开启iTunes文件共享    
+在工程的Info.plist文件中添加支持iTunes文件共享的Key:Application supports iTunes file sharing，并将值设为YES，这样APP中Docunmets文件夹的文件就可以通过iTunes共享了。
+
++ 获取app的版本号、app名称    
+{% highlight Objective-C %}
+NSDictionary *infoDictionary = [[NSBundle mainBundle] infoDictionary];
+// app名称
+NSString *app_Name = [infoDictionary objectForKey:@"CFBundleDisplayName"];
+// app版本
+NSString *app_Version = [infoDictionary objectForKey:@"CFBundleShortVersionString"];
+// app build版本
+NSString *app_build = [infoDictionary objectForKey:@"CFBundleVersion"];    
+{% endhighlight %}
++ 判断app是否为第一次启动    
+{% highlight Objective-C %}
+if (![[NSUserDefaults standardUserDefaults] boolForKey:@"everLaunched"]) {
+    [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"everLaunched"];
+    [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"firstLaunch"]; 
+}
+else{
+    [[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"firstLaunch"];
+}
+{% endhighlight %}
+
+[iOS 开发Tip]:http://jekyllrb.com
+
+
