@@ -14,10 +14,16 @@ author:
   linkedin_username:  傲云-王-852986100
   description: WangJace's Blog
 
+defaults:
+  -
+    scope:
+      path: ''
+      type: 'posts'
+    values:
+        layout: 'post'
+
 # Build settings
 destination: _site
-# Gems
-gems: [jekyll-paginate]
 paginate: 10
 permalink: /:year/:title/
 markdown: kramdown
@@ -30,5 +36,8 @@ kramdown:
   # do not replace newlines by <br>s
   hard_wrap: false
   auto_ids: true
+
+# Gems
+gems: [jekyll-paginate]
 
 exclude: ['RiADME.md', 'Gemfile', 'Gemfile.lock', 'screenshot.png']
