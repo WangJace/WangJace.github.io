@@ -1,43 +1,52 @@
-# Site setting
-title: WangJace
+# Basic
+title: Wangjace
+#subtitle: A blog-orientation theme for Jekyll
+#welcome_message: <a href="https://github.com/onevcat/vno-jekyll" target="_blank">Download the theme</a>
 description: iOS开发者，喜欢技术专研，运动爱好者
-url: 'http://wangjace.github.io/' 
+creator: <a href="http://blog.wangjace.site">@wangjace</a>
+
+url: "http://wangjace.github.io"
 baseurl: '/'
 domain: 'http://blog.wangjace.site'
-# google_analytics: 'UA-XXXXXX-X'
 
-author:
-  name: 'WangJace'
-  email: wang-jace@foxmail.com
-  twitter_username:  Jace_wcj
-  github_username:  WangJace
-  linkedin_username:  傲云-王-852986100
-  description: WangJace's Blog
+permalink: /:year/:month/:title/
 
-defaults:
-  -
-    scope:
-      path: ''
-      type: 'posts'
-    values:
-        layout: 'post'
-
-# Build settings
-destination: _site
-paginate: 10
-permalink: /:year/:title/
-markdown: kramdown
-rouge: pygments
+# Format
 highlighter: rouge
 
-kramdown:
-  # use Github Flavored Markdown
-  input: GFM
-  # do not replace newlines by <br>s
-  hard_wrap: false
-  auto_ids: true
+# supported colors: blue, green, purple, red, orange or slate. If you need clear, leave it empty.
+cover_color: gray
 
-# Gems
+# The blog button should not be removed.
+blog_button:
+    title: Blog
+    description: Visit blog
+
+# Navigation buttons in the front page.
+#nav:
+#- {title: Projects, description: My Projects, url: 'http://project.onevcat.com'}
+    # - {title: Another Button, description: A button, url: 'http://example.com'}
+
+# Pagination
 gems: [jekyll-paginate]
+paginate: 10
+paginate_path: "page/:num/"
 
-exclude: ['RiADME.md', 'Gemfile', 'Gemfile.lock', 'screenshot.png']
+# Comment
+comment:
+    disqus: wangjaces-blog
+    
+# Social
+social:
+    weibo: WangJace
+    github: WangJace
+    twitter: Jace_wcj
+    #gplus: 107108267983477358170
+    linkedin: 傲云-王-852986100
+    mail: wang-jace@foxmail.com
+
+# Google Analytics
+ga:
+    # id: your_ga_id
+    # host: your_host
+
