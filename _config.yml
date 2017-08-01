@@ -2,8 +2,8 @@
 title: WangJace
 description: iOS开发者，喜欢技术专研，运动爱好者
 url: 'http://wangjace.github.io/' 
-baseurl: 'http://wangjace.github.io/'
-domain: '/'
+baseurl: '/'
+domain: 'blog.wangjace.site'
 # google_analytics: 'UA-XXXXXX-X'
 
 author:
@@ -31,5 +31,4 @@ kramdown:
   hard_wrap: false
   auto_ids: true
 
-exclude: ['README.md', 'Gemfile', 'Gemfile.lock', 'screenshot.png']
-baseurl: '/'
+exclude: ['RiADME.md', 'Gemfile', 'Gemfile.lock', 'screenshot.png']
