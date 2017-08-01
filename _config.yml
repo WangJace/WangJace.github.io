@@ -41,12 +41,12 @@ social:
     weibo: WangJace
     github: WangJace
     twitter: Jace_wcj
-    #gplus: 107108267983477358170
+    gplus: 104433862847708362590
     linkedin: 傲云-王-852986100
     mail: wang-jace@foxmail.com
 
 # Google Analytics
 ga:
-    # id: your_ga_id
-    # host: your_host
+    id: UA-103802913-1
+    host: auto
 
