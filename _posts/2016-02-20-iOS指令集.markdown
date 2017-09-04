@@ -1,9 +1,7 @@
 ---
 layout: post
 title:  "iOS指令集"
-date:   2016-02-20 18:04:23
-categories: Jace update
-comments: true
+date:   2016-02-20 18:04:23.000000000 +09:00
 tags: [iOS杂碎]
 ---   
 + armv6    
@@ -19,8 +17,6 @@ iPhone5, iPhone5C, iPad4(iPad with Retina Display)
 iPhone5S, iPad Air, iPad mini2(iPad mini with Retina Display)    
 + armv8    
 iPhone6, iPhone6 Plus, iPhone6S, iPhone6S Plus
-
-[iOS杂碎]:http://jekyllrb.com
 
 
 

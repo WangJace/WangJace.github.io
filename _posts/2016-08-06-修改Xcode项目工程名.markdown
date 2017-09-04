@@ -1,10 +1,8 @@
 ---
 layout: post
 title:  "修改Xcode项目工程名"
-date:   2016-08-06 23:26:23
-categories: Jace update
-comments: true
-tags: [iOS 开发随记]
+date:   2016-08-06 23:26:23.000000000 +09:00
+tags: [iOS开发随记]
 ---    
 在iOS开发过程中，偶尔会遇到需要修改整个项目的工程名的需求。我在开发过程中也遇到了，本文整理了修改一个Xcode项目工程名的过程。    
 **写在前面的提醒：为了避免工程在改完工程名后运行不了又无法回滚，强烈建议在修改工程名之前先备份整个工程**
@@ -41,6 +39,4 @@ OK，运行编译。
 [image-9]:	%7B%7Bsite.domain%7D%7D/images/article_images/2016-08-06-%E4%BF%AE%E6%94%B9Xcode%E5%B7%A5%E7%A8%8B%E5%90%8D09.png
 [image-10]:	%7B%7Bsite.domain%7D%7D/images/article_images/2016-08-06-%E4%BF%AE%E6%94%B9Xcode%E5%B7%A5%E7%A8%8B%E5%90%8D10.png
 [image-11]:	%7B%7Bsite.domain%7D%7D/images/article_images/2016-08-06-%E4%BF%AE%E6%94%B9Xcode%E5%B7%A5%E7%A8%8B%E5%90%8D11.png
-
-[iOS 开发随记]:http://jekyllrb.com
 

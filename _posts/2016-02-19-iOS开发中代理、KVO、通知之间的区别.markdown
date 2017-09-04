@@ -1,9 +1,7 @@
 ---
 layout: post
 title:  "iOS开发中代理、KVO、通知之间的区别"
-date:   2016-02-19 15:04:23
-categories: Jace update
-comments: true
+date:   2016-02-19 15:04:23.000000000 +09:00
 tags: [iOS开发随记]
 ---
 在iOS开发中经常会需要在多个Controller之间进行通信，为了降低Controller之间的耦合性，开发中经常会用到代理、KVO、通知等，那他们之间又有什么区别。
@@ -20,9 +18,8 @@ tags: [iOS开发随记]
   特点：一对多    
   优点：多个对象可以同时对一个通知做出反应，即一对多；通知可携带自定义信息    
   缺点：编译期不会检查同志是否能够被观察者正确的处理；释放注册的对象时，需要在通知中心取消注册的通知；不便于调试。    
-参考：[IOS 如何选择delegate、notification、KVO？]
-  
-[iOS开发随记]:http://jekyllrb.com
+参考：[IOS 如何选择delegate、notification、KVO？]    
+
 [IOS 如何选择delegate、notification、KVO？]:http://my.oschina.net/u/728866/blog/116571?fromerr=Qs1SwQ9v
 
 

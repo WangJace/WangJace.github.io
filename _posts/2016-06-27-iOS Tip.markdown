@@ -1,9 +1,7 @@
 ---
 layout: post
 title:  "iOS Tip"
-date:   2016-06-27 11:26:23
-categories: Jace update
-comments: true
+date:   2016-06-27 11:26:23.000000000 +09:00
 tags: [iOS 开发Tip]
 ---
 + iOS APP开启iTunes文件共享    
@@ -29,7 +27,5 @@ else{
     [[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"firstLaunch"];
 }
 {% endhighlight %}
-
-[iOS 开发Tip]:http://jekyllrb.com
 
 
