@@ -5,8 +5,7 @@ title: WangJace
 description: iOS开发者，喜欢技术专研，运动爱好者
 creator: <a href="http://blog.wangjace.site">@wangjace</a>
 
-url: "http://wangjace.github.io"
-#baseurl: '/'
+url: "http://wangjace.github.io"#baseurl: '/'
 domain: 'http://blog.wangjace.site'
 
 permalink: /:year/:month/:title/
