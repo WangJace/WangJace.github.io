@@ -8,7 +8,7 @@ tags: [iOS开发随记]
 **写在前面的提醒：为了避免工程在改完工程名后运行不了又无法回滚，强烈建议在修改工程名之前先备份整个工程**
 
 第一步，打开Xcode工程，选中工程文件，按下图操作    
-![Step1][image-1]    
+![Step1][image-1]   
 当输入完，单击Enter的时候，会弹出一个提示窗，如下图，单击Rename    
 ![Step2][image-2]    
 第二步，修改工程的根目录文件夹名称    
@@ -28,15 +28,15 @@ tags: [iOS开发随记]
 ![Step11][image-11]    
 OK，运行编译。
 
-[image-1]:	%7B%7Bsite.domain%7D%7Dimages/article_images/2016-08-06-%E4%BF%AE%E6%94%B9Xcode%E5%B7%A5%E7%A8%8B%E5%90%8D01.png
-[image-2]:	%7B%7Bsite.domain%7D%7D/images/article_images/2016-08-06-%E4%BF%AE%E6%94%B9Xcode%E5%B7%A5%E7%A8%8B%E5%90%8D02.png
-[image-3]:	%7B%7Bsite.domain%7D%7D/images/article_images/2016-08-06-%E4%BF%AE%E6%94%B9Xcode%E5%B7%A5%E7%A8%8B%E5%90%8D03.png
-[image-4]:	%7B%7Bsite.domain%7D%7D/images/article_images/2016-08-06-%E4%BF%AE%E6%94%B9Xcode%E5%B7%A5%E7%A8%8B%E5%90%8D04.png
-[image-5]:	%7B%7Bsite.domain%7D%7D/images/article_images/2016-08-06-%E4%BF%AE%E6%94%B9Xcode%E5%B7%A5%E7%A8%8B%E5%90%8D05.png
-[image-6]:	%7B%7Bsite.domain%7D%7D/images/article_images/2016-08-06-%E4%BF%AE%E6%94%B9Xcode%E5%B7%A5%E7%A8%8B%E5%90%8D06.png
-[image-7]:	%7B%7Bsite.domain%7D%7D/images/article_images/2016-08-06-%E4%BF%AE%E6%94%B9Xcode%E5%B7%A5%E7%A8%8B%E5%90%8D07.png
-[image-8]:	%7B%7Bsite.domain%7D%7D/images/article_images/2016-08-06-%E4%BF%AE%E6%94%B9Xcode%E5%B7%A5%E7%A8%8B%E5%90%8D08.png
-[image-9]:	%7B%7Bsite.domain%7D%7D/images/article_images/2016-08-06-%E4%BF%AE%E6%94%B9Xcode%E5%B7%A5%E7%A8%8B%E5%90%8D09.png
-[image-10]:	%7B%7Bsite.domain%7D%7D/images/article_images/2016-08-06-%E4%BF%AE%E6%94%B9Xcode%E5%B7%A5%E7%A8%8B%E5%90%8D10.png
-[image-11]:	%7B%7Bsite.domain%7D%7D/images/article_images/2016-08-06-%E4%BF%AE%E6%94%B9Xcode%E5%B7%A5%E7%A8%8B%E5%90%8D11.png
+[image-1]:	http://blog.wangjace.site/images/article_images/2016-08-06-修改Xcode工程名01.png
+[image-2]:	http://blog.wangjace.site/images/article_images/2016-08-06-修改Xcode工程名02.png
+[image-3]:	http://blog.wangjace.site/images/article_images/2016-08-06-修改Xcode工程名03.png
+[image-4]:	http://blog.wangjace.site/images/article_images/2016-08-06-修改Xcode工程名04.png
+[image-5]:	http://blog.wangjace.site/images/article_images/2016-08-06-修改Xcode工程名05.png
+[image-6]:	http://blog.wangjace.site/images/article_images/2016-08-06-修改Xcode工程名06.png
+[image-7]:	http://blog.wangjace.site/images/article_images/2016-08-06-修改Xcode工程名07.png
+[image-8]:	http://blog.wangjace.site/images/article_images/2016-08-06-修改Xcode工程名08.png
+[image-9]:	http://blog.wangjace.site/images/article_images/2016-08-06-修改Xcode工程名09.png
+[image-10]:	http://blog.wangjace.site/images/article_images/2016-08-06-修改Xcode工程名10.png
+[image-11]:	http://blog.wangjace.site/images/article_images/2016-08-06-修改Xcode工程名11.png
 
