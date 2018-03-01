@@ -6,7 +6,9 @@ tags: [Others]
 ---
 首先是选择云端服务器平台，[知乎]上有各个VPS平台的对比，这里个人推荐用[Digitalocean]和[Vutrl]。本文选用的是Vutrl。    
 首先是在平台上注册账号，并绑定信用卡或者Paypal账号。（注：绑定完信用卡或者Paypal账号才能创建虚拟服务器）。    
+
 **• 创建云服务器**    
+
 1.选择服务器的区域
 ![image-01]
 至于选择哪个区域比较快，可以在Vutrl提供的[服务器测速地址]来测试一下。
@@ -24,14 +26,18 @@ tags: [Others]
 ![image-07]
 5.点击Deploy Now创建服务器。当Status显示Running的时候，就证明服务器已经创建成功并启动
 ![image-08]
-**• 修改Root密码**     
+
+**• 修改Root密码**   
+  
 点击服务器进入查看服务器信息
 ![image-09]
 点击右上角进入console窗口（会弹出一个新窗口），注意远程端口出现的时间可能会需要一段时间，如果等了很久都没出现，就关闭重试一次
 ![image-10]
 输入root，然后Enter，输入root密码（在服务器信息中查找）。ps:输入的时候是不会出现输入结果的，直接按顺序准确输入就行。成功登录后，输入 *passwd root* 修改root密码，密码需输入两次进行确认。
 ![image-11]
+
 **• 安装Shadowsocks server端**    
+
 使用root用户登录，运行以下命令：
 {% highlight shell %}
 wget --no-check-certificate -O shadowsocks.sh https://raw.githubusercontent.com/teddysun/shadowsocks_install/master/shadowsocks.sh
@@ -89,12 +95,16 @@ vi /etc/shadowsocks.json
     "fast_open": false
 }
 {% endhighlight %}
+
 **• Shadowsocks的使用命令**    
+
 启动：/etc/init.d/shadowsocks start    
 停止：/etc/init.d/shadowsocks stop    
 重启：/etc/init.d/shadowsocks restart    
 状态：/etc/init.d/shadowsocks status    
+
 **• 使用Shadowsocks客户端**    
+
 Shadowsocks的客户端支持各大主流平台，而且客户端的配置一般都很简单，只需要配置一下服务器的ip地址和之前设置好的连接密码，加密方式即可。Shadowsocks各个平台的客户端下载链接如下：    
 + [OS X]
 + [Windows]
