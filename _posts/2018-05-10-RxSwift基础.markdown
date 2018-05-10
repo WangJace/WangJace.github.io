@@ -1,0 +1,294 @@
+---
+layout: post
+title:  "RxSwift基础"
+date:   2018-05-10 14:49:00.000000000 +09:00
+tags: [iOS 笔记]
+---
+RxSwift中可订阅序列会给订阅者发送的事件类型有Next、Error、Completed，Next为正常的事件，当出现错误时会发送Error，当完成时会自动发送Completed。
+### • 创建可订阅事件流的几种方式
+#### 1.nerver
+不发松任何事件的可订阅事件流，下面这段代码不会打印任何东西，因为never不会发送任何时间给订阅者，所以订阅者的代码块不会被执行，即不会打印 *This will never be printed* 。
+{% highlight Swift %}
+let neverSequence = Observable<String>.never()
+let neverSequenceSubscription = neverSequence
+                                    .subscribe { _ in
+                                        print("This will never be printed")
+                                    }
+neverSequenceSubscription.disposed(by: DisposeBag())
+{% endhighlight %}
+#### 2.empty
+只发送 *completed* 事件的可订阅事件流。下面这段代码只会打印 *completed* 。
+{% highlight Swift %}
+Observable<Int>.empty()
+    .subscribe { event in
+        print(event)
+        /* 
+         completed
+         */
+    }
+    .disposed(by: DisposeBag())
+{% endhighlight %}
+#### 3.just
+只发送一个事件的可订阅事件流。
+{% highlight Swift %}
+Observable.just("🔴")
+    .subscribe { event in
+    print(event)
+    /* 
+     next(🔴)
+     completed
+     */
+    }
+    .disposed(by: DisposeBag())
+{% endhighlight %}
+#### 4.of
+发送一定数量事件的可订阅事件流.
+{% highlight Swift %}
+Observable.of("🐶", "🐱", "🐭", "🐹")
+    .subscribe({ event in
+        print(event)
+        /*
+         next(🐶)
+         next(🐱)
+         next(🐭)
+         next(🐹)
+         completed
+         */
+    })
+    .disposed(by: DisposeBag())
+{% endhighlight %}
+#### 5.from
+获取一个队列（Array、Dictionary、Set）中的元素并转为一个个的事件发送的可订阅事件流。
+{% highlight Swift %}
+Observable.from(["🐶", "🐱", "🐭", "🐹"])
+    .subscribe({
+        print($0)     // 语法糖: $0代表的是代码块的第一个参数，若有多个参数，则使用$0、$1、$2，依此类推。
+        /*
+         next(🐶)
+         next(🐱)
+         next(🐭)
+         next(🐹)
+         completed
+        */
+    })
+    .disposed(by: DisposeBag())
+{% endhighlight %}   
+若队列元素仍为队列，from不会进一步解析。from只进行一层解析。
+{% highlight Swift %}
+Observable.from([["🐶", "🐱", "🐭", "🐹"], ["🍎", "🍐", "🍊", "🍋"]])
+    .subscribe({
+        print($0)
+        /*
+         next(["🐶", "🐱", "🐭", "🐹"])
+         next(["🍎", "🍐", "🍊", "🍋"])
+         completed
+         */
+    })
+    .disposed(by: DisposeBag())
+{% endhighlight %}
+from和of的区别：of是将传入的每个元素转为事件发送，from是将传入的队列元素取出，一一转为事件发送。
+{% highlight Swift %}
+// of
+Observable.of(["🐶", "🐱", "🐭", "🐹"], ["🍎", "🍐", "🍊", "🍋"])
+    .subscribe({
+        print($0)
+        /*
+         next(["🐶", "🐱", "🐭", "🐹"])
+         next(["🍎", "🍐", "🍊", "🍋"])
+         completed
+         */
+    })
+    .disposed(by: DisposeBag())
+{% endhighlight %}
+#### 6.create
+创建一个自定义的可订阅事件流。
+{% highlight Swift %}
+let myJust = { (element: String) -> Observable<String> in
+    return Observable.create { observer in
+                observer.on(.next(element))
+                observer.on(.completed)
+                return Disposables.create()
+            }
+    }
+myJust("🔴")
+    .subscribe {
+        print($0)
+        /*
+         next(🔴)
+         completed
+        */
+    }
+    .disposed(by: DisposeBag())
+{% endhighlight %}
+#### 7.range
+创建发送一连串有序数字事件的可订阅事件流。
+{% highlight Swift %}
+Observable.range(start: 1, count: 5)
+    .subscribe {
+        print($0)
+        /*
+         next(1)
+         next(2)
+         next(3)
+         next(4)
+         next(5)
+         completed
+        */
+    }
+    .disposed(by: DisposeBag())
+{% endhighlight %}
+#### 8.repeatElement
+重复发送n次一个特定事件的可订阅事件流。
+{% highlight Swift %}
+Observable.repeatElement("🔴")
+    .take(3)     // 定义重复发送的次数
+    .subscribe({
+        print($0)
+        /*
+         next(🔴)
+         next(🔴)
+         next(🔴)
+         completed
+        */
+    })
+    .disposed(by: DisposeBag())
+{% endhighlight %}
+#### 9.generate
+循环改变初始值，判断初始值在判断条件的结果是否为true来控制事件的发送。
+{% highlight Swift %}
+Observable.generate(
+    initialState: 0,
+    condition: { $0 < 3 },
+    iterate: { $0 + 1 }
+    )
+    .subscribe({
+        print($0)
+        /*
+         next(0)
+         next(1)
+         next(2)
+         completed
+        */
+    })
+    .disposed(by: DisposeBag())
+{% endhighlight %}
+### • Subject
+Subject既能作为可订阅的事件流，也可以作为订阅者的。
+#### 1.PublishSubject
+PublishSubject作为订阅者的时候只能接收订阅之后发送的事件。
+{% highlight Swift %}
+let disposeBag = DisposeBag()
+let subject = PublishSubject<String>()
+subject.subscribe({
+    print("Subscription:1, Event:",$0);
+}).disposed(by: disposeBag)
+subject.onNext("🐶")
+subject.onNext("🐱")
+subject.subscribe({
+    print("Subscription:2, Event:",$0);
+}).disposed(by: disposeBag)
+subject.onNext("🅰️")
+subject.onNext("🅱️")
+/*
+ Subscription:1, Event: next(🐶)
+ Subscription:1, Event: next(🐱)
+ Subscription:1, Event: next(🅰️)
+ Subscription:2, Event: next(🅰️)
+ Subscription:1, Event: next(🅱️)
+ Subscription:2, Event: next(🅱️)
+*/
+{% endhighlight %}
+#### 2.ReplaySubject
+ReplaySubject作为订阅者的时候，不仅接收订阅之后发送的事件，还能设置接收订阅之前发送的n个事件。
+{% highlight Swift %}
+let disposeBag = DisposeBag()
+let subject = ReplaySubject<String>.create(bufferSize: 2)     // 接收订阅前的2个事件
+subject.subscribe({
+    print("Subscription:1, Event:",$0);
+}).disposed(by: disposeBag)
+subject.onNext("🐶")
+subject.onNext("🐱")
+subject.onNext("🐭")
+subject.subscribe({
+    print("Subscription:2, Event:",$0);
+}).disposed(by: disposeBag)
+subject.onNext("🅰️")
+subject.onNext("🅱️")
+/*
+ Subscription:1, Event: next(🐶)
+ Subscription:1, Event: next(🐱)
+ Subscription:1, Event: next(🐭)
+ Subscription:2, Event: next(🐭)
+ Subscription:1, Event: next(🅰️)
+ Subscription:2, Event: next(🅰️)
+ Subscription:1, Event: next(🅱️)
+ Subscription:2, Event: next(🅱️)
+*/
+{% endhighlight %}
+#### 3.BehaviorSubject
+BehaviorSubject作为订阅者的时候，不仅接收订阅之后发送的事件，还接收订阅之前最后发送的事件。效果等同于 <code>ReplaySubject<String>.create(bufferSize: 1) 
+{% highlight Swift %}
+let disposeBag = DisposeBag()
+let subject = BehaviorSubject(value: "🔴")
+subject.subscribe({
+    print("Subscription:1, Event:",$0);
+}).disposed(by: disposeBag)
+subject.onNext("🐶")
+subject.onNext("🐱")
+subject.subscribe({
+    print("Subscription:2, Event:",$0);
+}).disposed(by: disposeBag)
+subject.onNext("🅰️")
+subject.onNext("🅱️")
+subject.subscribe({
+    print("Subscription:3, Event:",$0);
+}).disposed(by: disposeBag)
+subject.onNext("🍐")
+subject.onNext("🍊")
+/*
+ Subscription:1, Event: next(🔴)
+ Subscription:1, Event: next(🐶)
+ Subscription:1, Event: next(🐱)
+ Subscription:2, Event: next(🐱)
+ Subscription:1, Event: next(🅰️)
+ Subscription:2, Event: next(🅰️)
+ Subscription:1, Event: next(🅱️)
+ Subscription:2, Event: next(🅱️)
+ Subscription:3, Event: next(🅱️)
+ Subscription:1, Event: next(🍐)
+ Subscription:2, Event: next(🍐)
+ Subscription:3, Event: next(🍐)
+ Subscription:1, Event: next(🍊)
+ Subscription:2, Event: next(🍊)
+ Subscription:3, Event: next(🍊)
+*/
+{% endhighlight %}
+#### 4.Variable
+Variable作为订阅者的时候，不仅接收订阅之后发送的事件，还接收订阅之前最后发送的事件。Variable与BehaviorSubject的区别就是Variable会自动发送completed事件。
+{% highlight Swift %}
+let disposeBag = DisposeBag()
+let variable = Variable("🔴")
+subject.subscribe({
+    print("Subscription:1, Event:",$0);
+}).disposed(by: disposeBag)
+variable.value = "🐶"
+variable.value = "🐱"
+subject.subscribe({
+    print("Subscription:2, Event:",$0);
+}).disposed(by: disposeBag)
+variable.value = "🅰️"
+variable.value = "🅱️"
+/*
+ Subscription:1, Event: next(🔴)
+ Subscription:1, Event: next(🐶)
+ Subscription:1, Event: next(🐱)
+ Subscription:2, Event: next(🐱)
+ Subscription:1, Event: next(🅰️)
+ Subscription:2, Event: next(🅰️)
+ Subscription:1, Event: next(🅱️)
+ Subscription:2, Event: next(🅱️)
+ Subscription:1, Event: completed
+ Subscription:2, Event: completed
+*/
+{% endhighlight %}
+
