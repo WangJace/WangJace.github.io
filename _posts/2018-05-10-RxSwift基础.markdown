@@ -268,12 +268,12 @@ Variable作为订阅者的时候，不仅接收订阅之后发送的事件，还
 {% highlight Swift %}
 let disposeBag = DisposeBag()
 let variable = Variable("🔴")
-subject.subscribe({
+variable.asObservable().subscribe({
     print("Subscription:1, Event:",$0);
 }).disposed(by: disposeBag)
 variable.value = "🐶"
 variable.value = "🐱"
-subject.subscribe({
+variable.asObservable().subscribe({
     print("Subscription:2, Event:",$0);
 }).disposed(by: disposeBag)
 variable.value = "🅰️"
