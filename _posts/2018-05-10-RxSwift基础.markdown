@@ -291,4 +291,10 @@ variable.value = "🅱️"
  Subscription:2, Event: completed
 */
 {% endhighlight %}
+#### 5.Driver
+Driver有以下特点：1 Driver序列不允许发出error，2 Driver序列的监听只会在主线程中。所以Driver是转为UI绑定量身打造的东西。以下情况你可以使用Driver替换BindTo:    
+不能发出error    
+在主线程中监听    
+共享事件流    
+
 
