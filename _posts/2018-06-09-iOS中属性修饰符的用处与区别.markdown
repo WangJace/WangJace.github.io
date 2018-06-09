@@ -37,7 +37,6 @@ weak和unsafe_unretained都是对对象的弱引用，用这两个修饰符的�
 copy修饰的属性在赋值的时候，原来的值引用计数不会变化，而是将该值copy到新辟的内存空间中。
 {% highlight Objective-C %}
 @property (nonatomic, copy) id property;
-
 -(void)setProperty:(id)newValue {
 	if property != newValue {
 		[property release];
