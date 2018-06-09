@@ -45,8 +45,8 @@ copy修饰的属性在赋值的时候，原来的值引用计数不会变化，�
 	}
 }
 {% endhighlight %}
-注：
-1.copy和mutableCopy，copy是拷贝一个不可变的对象，mutableCopy是拷贝一个可变的对象。例如NSString对象的copy，得到的是一个不可变NSString对象，mutableCopy得到的是一个可变的NSMutableString对象，而NSMutableString对象的copy，得到的是一个不可变NSString对象，mutableCopy得到的是一个可变的NSMutableString对象。
+注：    
+1.copy和mutableCopy，copy是拷贝一个不可变的对象，mutableCopy是拷贝一个可变的对象。例如NSString对象的copy，得到的是一个不可变NSString对象，mutableCopy得到的是一个可变的NSMutableString对象，而NSMutableString对象的copy，得到的是一个不可变NSString对象，mutableCopy得到的是一个可变的NSMutableString对象。    
 2.当属性为可变的对象类型，如果该属性用copy进行修饰，则生成的依然是不可变对象。
 ### 5.assign
 使用assign修饰的属性不会对引用计数进行任何操作，一般用来修饰基本数据类型(NSInteger, CGFloat)和C数据类型(int, float, double)等。它的setter方法是直接赋值，不进行任何retain操作。
