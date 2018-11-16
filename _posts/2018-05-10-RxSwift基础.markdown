@@ -1,7 +1,6 @@
 ---
 layout: post
 title:  "RxSwift基础"
-date:   2018-05-10 14:49:00.000000000 +09:00
 tags: [iOS 笔记]
 ---
 RxSwift中可订阅序列会给订阅者发送的事件类型有Next、Error、Completed，Next为正常的事件，当出现错误时发送Error，当完成时发送Completed。

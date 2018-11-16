@@ -28,15 +28,15 @@ tags: [iOS笔记]
 ![Step11][image-11]    
 OK，运行编译。
 
-[image-1]:	http://blog.wangjace.site/images/article_images/2016-08-06-修改Xcode工程名01.png
-[image-2]:	http://blog.wangjace.site/images/article_images/2016-08-06-修改Xcode工程名02.png
-[image-3]:	http://blog.wangjace.site/images/article_images/2016-08-06-修改Xcode工程名03.png
-[image-4]:	http://blog.wangjace.site/images/article_images/2016-08-06-修改Xcode工程名04.png
-[image-5]:	http://blog.wangjace.site/images/article_images/2016-08-06-修改Xcode工程名05.png
-[image-6]:	http://blog.wangjace.site/images/article_images/2016-08-06-修改Xcode工程名06.png
-[image-7]:	http://blog.wangjace.site/images/article_images/2016-08-06-修改Xcode工程名07.png
-[image-8]:	http://blog.wangjace.site/images/article_images/2016-08-06-修改Xcode工程名08.png
-[image-9]:	http://blog.wangjace.site/images/article_images/2016-08-06-修改Xcode工程名09.png
-[image-10]:	http://blog.wangjace.site/images/article_images/2016-08-06-修改Xcode工程名10.png
-[image-11]:	http://blog.wangjace.site/images/article_images/2016-08-06-修改Xcode工程名11.png
+[image-1]:	/assets/article_images/2016-08-06-修改Xcode工程名01.png
+[image-2]:	/assets/article_images/2016-08-06-修改Xcode工程名02.png
+[image-3]:	/assets/article_images/2016-08-06-修改Xcode工程名03.png
+[image-4]:	/assets/article_images/2016-08-06-修改Xcode工程名04.png
+[image-5]:	/assets/article_images/2016-08-06-修改Xcode工程名05.png
+[image-6]:	/assets/article_images/2016-08-06-修改Xcode工程名06.png
+[image-7]:	/assets/article_images/2016-08-06-修改Xcode工程名07.png
+[image-8]:	/assets/article_images/2016-08-06-修改Xcode工程名08.png
+[image-9]:	/assets/article_images/2016-08-06-修改Xcode工程名09.png
+[image-10]:	/assets/article_images/2016-08-06-修改Xcode工程名10.png
+[image-11]:	/assets/article_images/2016-08-06-修改Xcode工程名11.png
 

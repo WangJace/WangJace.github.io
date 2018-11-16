@@ -1,7 +1,6 @@
 ---
 layout: post
 title:  "在swift中如何实现Objective-C中的宏定义"
-date:   2016-08-25 23:40:23.000000000 +09:00
 tags: [Swift笔记]
 ---    
 在Objective-C开发中，经常会使用到宏定义来定义一些全局变量和一些简单的全局方法。但在swift中并不支持宏定义语法，但可以利用swift项目共享命名空间这一特点，在项目中使用Const.swift来定义这些全局变量和公用方法

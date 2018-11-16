@@ -1,7 +1,6 @@
 ---
 layout: post
 title:  "iOS指令集"
-date:   2016-02-20 18:04:23.000000000 +09:00
 tags: [iOS笔记]
 ---   
 + armv6    

@@ -1,7 +1,6 @@
 ---
 layout: post
 title:  "数据结构的相关概念"
-date:   2018-06-10 15:25:00.000000000 +09:00
 tags: [计算机基础]
 ---
 #### 数据
@@ -21,6 +20,6 @@ tags: [计算机基础]
 按照视点的不同，数据结构分为逻辑结构和物理结构。
 ![image02][image-2]
 
-[image-1]: http://blog.wangjace.site/images/article_images/2018-06-10-数据结构的相关概念01.png
-[image-2]: http://blog.wangjace.site/images/article_images/2018-06-10-数据结构的相关概念02.png
+[image-1]: /assets/article_images/2018-06-10-数据结构的相关概念01.png
+[image-2]: /assets/article_images/2018-06-10-数据结构的相关概念02.png
 

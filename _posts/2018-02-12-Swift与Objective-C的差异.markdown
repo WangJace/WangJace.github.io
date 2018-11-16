@@ -1,7 +1,6 @@
 ---
 layout: post
 title:  "Swift与Objective-C的差异"
-date:   2018-02-12 10:12:00.000000000 +09:00
 tags: [iOS笔记]
 ---
 **1.Optional**    

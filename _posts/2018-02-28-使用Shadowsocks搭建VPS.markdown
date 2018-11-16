@@ -1,7 +1,6 @@
 ---
 layout: post
 title:  "使用Shadowsocks搭建VPS"
-date:   2018-02-28 16:10:00.000000000 +09:00
 tags: [Others]
 ---
 首先是选择云端服务器平台，[知乎]上有各个VPS平台的对比，这里个人推荐用[Digitalocean]和[Vutrl]。本文选用的是Vutrl。    
@@ -125,16 +124,16 @@ Shadowsocks的客户端支持各大主流平台，而且客户端的配置一般
 [Android]:https://github.com/shadowsocks/shadowsocks-android/releases
 [iOS]:https://github.com/shadowsocks/shadowsocks-iOS/wiki/Help
 [Others]:https://github.com/shadowsocks/shadowsocks/wiki/Ports-and-Clients
-[image-01]:     http://blog.wangjace.site/images/article_images/2018-02-28-使用Shadowsocks搭建VPS01.png
-[image-02]:     http://blog.wangjace.site/images/article_images/2018-02-28-使用Shadowsocks搭建VPS02.png
-[image-03]:     http://blog.wangjace.site/images/article_images/2018-02-28-使用Shadowsocks搭建VPS03.png
-[image-04]:     http://blog.wangjace.site/images/article_images/2018-02-28-使用Shadowsocks搭建VPS04.png
-[image-05]:     http://blog.wangjace.site/images/article_images/2018-02-28-使用Shadowsocks搭建VPS05.png
-[image-06]:     http://blog.wangjace.site/images/article_images/2018-02-28-使用Shadowsocks搭建VPS06.png
-[image-07]:     http://blog.wangjace.site/images/article_images/2018-02-28-使用Shadowsocks搭建VPS07.png
-[image-08]:     http://blog.wangjace.site/images/article_images/2018-02-28-使用Shadowsocks搭建VPS08.png
-[image-09]:     http://blog.wangjace.site/images/article_images/2018-02-28-使用Shadowsocks搭建VPS09.png
-[image-10]:     http://blog.wangjace.site/images/article_images/2018-02-28-使用Shadowsocks搭建VPS10.png
-[image-11]:     http://blog.wangjace.site/images/article_images/2018-02-28-使用Shadowsocks搭建VPS11.png
+[image-01]:     /assets/article_images/2018-02-28-使用Shadowsocks搭建VPS01.png
+[image-02]:     /assets/article_images/2018-02-28-使用Shadowsocks搭建VPS02.png
+[image-03]:     /assets/article_images/2018-02-28-使用Shadowsocks搭建VPS03.png
+[image-04]:     /assets/article_images/2018-02-28-使用Shadowsocks搭建VPS04.png
+[image-05]:     /assets/article_images/2018-02-28-使用Shadowsocks搭建VPS05.png
+[image-06]:     /assets/article_images/2018-02-28-使用Shadowsocks搭建VPS06.png
+[image-07]:     /assets/article_images/2018-02-28-使用Shadowsocks搭建VPS07.png
+[image-08]:     /assets/article_images/2018-02-28-使用Shadowsocks搭建VPS08.png
+[image-09]:     /assets/article_images/2018-02-28-使用Shadowsocks搭建VPS09.png
+[image-10]:     /assets/article_images/2018-02-28-使用Shadowsocks搭建VPS10.png
+[image-11]:     /assets/article_images/2018-02-28-使用Shadowsocks搭建VPS11.png
 
 

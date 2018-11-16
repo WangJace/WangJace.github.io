@@ -1,7 +1,6 @@
 ---
 layout: post
 title:  "算法时间复杂度的计算方法"
-date:   2018-06-11 00:02:00.000000000 +09:00
 tags: [计算机基础]
 ---
 首先先了解一下算法时间复杂度的定义：    
@@ -17,6 +16,6 @@ tags: [计算机基础]
 常见的时间复杂度所耗费的时间从小到大依次是：    
 **O(1)<O($logn$)<O($n$)<O($nlogn$)<O($n^2$)<O($n^3$)<O($2^n$)<O($n!$)<O($n^n$)**
 
-[image-1]: http://blog.wangjace.site/images/article_images/2018-06-11-算法时间复杂度的计算方法.png
+[image-1]: /assets/article_images/2018-06-11-算法时间复杂度的计算方法.png
 
 

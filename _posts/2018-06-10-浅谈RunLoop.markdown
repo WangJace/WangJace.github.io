@@ -1,7 +1,6 @@
 ---
 layout: post
 title:  "浅谈RunLoop"
-date:   2018-06-10 22:33:00.000000000 +09:00
 tags: [iOS 笔记]
 ---
 
@@ -64,6 +63,6 @@ iOS开发中，系统默认注册了5个Mode：
 
 未完，待续。。。
 
-[image-1]: http://blog.wangjace.site/images/article_images/2018-06-10-浅谈RunLoop01.png
+[image-1]: /assets/article_images/2018-06-10-浅谈RunLoop01.png
 
 

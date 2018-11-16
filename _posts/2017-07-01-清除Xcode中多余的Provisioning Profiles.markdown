@@ -1,7 +1,6 @@
 ---
 layout: post
 title:  "清除Xcode中多余的Provisioning Profiles"
-date:   2017-07-01 10:00:00.000000000 +09:00
 tags: [iOS笔记]
 ---
 在iOS开发中，经常会出现时间一长，Provisioning Profiles越积越多，而且每次更新Provisioning Profiles，旧版的依然会存在着。    
