@@ -1,6 +1,6 @@
 ---
 layout: post
-title:  "iOS Runtime"
+title:  "iOS Runtime详解"
 tags: [iOS 笔记]
 ---
 ### 关于Runtime
@@ -181,7 +181,7 @@ Category是表示一个指向分类的结构体的指针，其定义如下：
 ```C
 /*
 name：是指 class_name 而不是 category_name。
-cls：要扩展的类对象，编译期间是不会定义的，而是在Runtime阶段通过name对 应到对应的类对象。
+cls：要扩展的类对象，编译期间是不会定义的，而是在Runtime阶段通过name对应到对应的类对象。
 instanceMethods：category中所有给类添加的实例方法的列表。
 classMethods：category中所有添加的类方法的列表。
 protocols：category实现的所有协议的列表。
@@ -302,6 +302,7 @@ static char kDefaultColorKey;
 |OBJC_ASSOCIATION_RETAIN|@property (atomic, strong)|指定一个关联对象的强引用，能被原子化使用。|
 |OBJC_ASSOCIATION_COPY|@property (atomic, copy)|指定一个关联对象的copy引用，能被原子化使用。|
 |-|-|-|
+
 #### 2.方法魔法(Method Swizzling)方法添加和替换和KVO实现
 ##### • 方法添加
 ```C
@@ -310,7 +311,7 @@ class_addMethod([self class], sel, (IMP)fooMethod, "v@:");
 ```
 + cls 被添加方法的类
 + name 添加的方法的名称的SEL
-+ imp 方法的实现。该函数必须至少要有两个参数，self,_cmd
++ imp 方法的实现。该函数必须至少要有两个参数：self，_cmd
 + 类型编码
 
 ##### • 方法替换
@@ -465,3 +466,5 @@ KVO 为子类的观察者属性重写调用存取方法的工作原理在代码�
 }
 ```
 以上就是 *Runtime* 应用的一些场景，本文到此结束了。
+
+参考&转载: [iOS Runtime详解](https://juejin.im/post/5ac0a6116fb9a028de44d717)
