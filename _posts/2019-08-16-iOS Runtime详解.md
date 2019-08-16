@@ -70,7 +70,7 @@ struct objc_method {
 6. 从父类的方法列表 *methodLists* 里寻找是否有 *walk* 这个方法指针，如果有执行此方法的 *IMP*，转发 *IMP* 的 *return* 值，如果没有且再往上还有父类，则回到上一步，直至没有父类即到达根类。如果在根类仍然没有找到 *walk* 方法，则进入下一步  
 7. 查看是否有进行方法的动态解析（即是否实现了```resolveInstanceMethod:```或```resolveClassMethod:```，这两个的区别在于一个是实例方法的动态解析，一个是类方法的动态解析），如果有，重新进行类和父类的方法查询，如果没有，则进入下一步  
 8. 查看是否有进行消息转发（即是否实现了```forwardingTargetForSelector:```或通过实现```methodSignatureForSelector:```进行方法注册，然后在```forwardInvocation:```方法中进行方法的实现或者转发），如果没有进行消息转发，则直接报错：*"...: unrecognized selector sent to instance ......"*  
-![流程图](/assets/article_images/2019-08-02-Objective-C方法调用内部原理.png)
+![流程图](/assets/article_images/2019-08-16-Objective-C方法调用内部原理.png)
 
 这个过程中的方法缓存是将之前调用过的方法放到 *objc_cache* 中，提高方法查询的效率。在找到 *walk* 方法后，把 *walk* 的method_name 作为 *key*，*method_imp* 作为 *value* 给存起来。当再次收到 *walk* 消息的时候，可以直接在 *cache* 里找到，避免去遍历*objc_method_list*。从前面的源代码可以看到 *objc_cache* 是存在 *objc_class* 结构体中的。  
 ### 消息传递中的相关结构体
@@ -114,7 +114,7 @@ typedef struct objc_object *id;
 ```
 类对象中的元数据存储的都是如何创建一个实例的相关信息，那么类对象和类方法应该从哪里创建呢？
 就是从 *isa* 指针指向的结构体创建，类对象的 *isa* 指针指向的我们称之为元类( *metaclass* )，元类中保存了创建类对象以及类方法所需的所有信息，因此整个结构应该如下图所示:  
-![实例-类-元类之间的结构关系](/assets/article_images/2019-08-02-实例-类-元类之间的结构关系.png)
+![实例-类-元类之间的结构关系](/assets/article_images/2019-08-16-实例-类-元类之间的结构关系.png)
 #### 3.元类(Meta Class)
 通过上面的结构图，可以看出 实例（*struct objc_object* 结构体）中的isa指针指向类对象，类对象 的 *isa* 指针指向的是元类，*super_class* 指针指向的是父类的类对象。而元类的 *super_class* 指针指向了父类的元类，那元类的 *isa* 指针又指向了自己。 
  
@@ -360,7 +360,7 @@ class_addMethod([self class], sel, (IMP)fooMethod, "v@:");
 
 *swizzling* 应该只在 *dispatch_once* 中完成,由于 *swizzling* 改变了全局的状态，所以我们需要确保每个预防措施在运行时都是可用的。原子操作就是这样一个用于确保代码只会被执行一次的预防措施，就算是在不同的线程中也能确保代码只执行一次。*Grand Central Dispatch* 的 *dispatch_once* 满足了所需要的需求，并且应该被当做使用 *swizzling* 的初始化单例方法的标准。  
 实现图解如下图。
-![方法交换](/assets/article_images/2019-08-02-方法替换.png)
+![方法交换](/assets/article_images/2019-08-16-方法替换.png)
 > 从图中可以看出，我们通过swizzling特性，将selectorC的方法实现IMPc与selectorN的方法实现IMPn交换了，当我们调用selectorC，也就是给对象发送selectorC消息时，所查找到的对应的方法实现就是IMPn而不是IMPc了。
 
 #### 3.KVO实现
