@@ -1,0 +1,43 @@
+I"�<p>CSS中的权重问题</p>
+
+<p><img src="/assets/article_images/2019-10-20-CSS中的盒子模型01.png" alt="" />
+margin（外边距）：它表示盒子之间的距离，可以通过 margin-top、margin-bottom、margin-left、margin-right 来控制各个方向的边距，它们可以为负值；<br />
+border（边框）：表示盒子的边框；<br />
+padding（内边距）：表示与内容之间的距离；<br />
+content（内容）：表示内容的大小；<br />
+盒子模型有两种模式，不同模式对于最终盒子的大小有所不同：<br />
+<strong>1.标准的盒子模型</strong><br />
+对于这种盒子模式，给它设置的 width 和 height 是 content 的宽高，当给盒子添加 padding 和 border 的时候，会增加盒子的整体大小。「外边距不会计入盒子的大小，它只是表示外部的边距」。下面的代码盒子最终的宽 = 100+20+20+10+10 = 160px；</p>
+
+<pre><code class="language-CSS">.std-box {
+    width: 100px;
+    height: 120px;
+    padding: 20px;
+    border: 10px solid red;
+    margin: 30px;
+    background-color: antiquewhite;
+}
+</code></pre>
+<p><img src="/assets/article_images/2019-10-20-CSS中的盒子模型02.png" alt="" />
+<strong>2.另类的盒子模型（The alternative CSS box model）</strong><br />
+对于这种盒子模式，给它设置的 width 和 height 是盒子的宽高，也就是说内容 content 的宽需要减去 border 和 padding 的宽。谷歌浏览器默认的是标准的盒模型，可以通过：</p>
+
+<pre><code class="language-CSS">box-sizing: border-box;
+</code></pre>
+<p>来修改盒模型为诡异盒模型，把上面的 CSS 修改成诡异盒模型。</p>
+
+<pre><code class="language-CSS">.std-box {
+    width: 100px;
+    height: 120px;
+    padding: 20px;
+    border: 10px solid red;
+    margin: 30px;
+    background-color: antiquewhite;
+    box-sizing: border-box; 
+}
+</code></pre>
+<p><img src="/assets/article_images/2019-10-20-CSS中的盒子模型03.png" alt="" /></p>
+
+<p>参考：<a href="https://mp.weixin.qq.com/s?__biz=MzI5MTY0ODAwNQ==&amp;mid=2247484083&amp;idx=1&amp;sn=2d02221949f29faa9fd19a01cfd13257&amp;scene=19#wechat_redirect">第10天：撑起CSS布局的半壁江山—盒子模型</a></p>
+
+:ET

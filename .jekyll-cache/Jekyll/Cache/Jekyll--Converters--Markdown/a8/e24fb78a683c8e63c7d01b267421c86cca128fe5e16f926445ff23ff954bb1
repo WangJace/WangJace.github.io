@@ -1,0 +1,30 @@
+I"�<p>CSS中主要有两种方式实现动画：<br />
+1、animation：CSS动画，可设置不同帧的动效；<br />
+2、transition：这种属于过渡动画，也就是说在修改某些 CSS 属性的时候，属性会有一个渐变的过程。</p>
+<h3 id="animation">animation</h3>
+<p>animation 是通过 CSS 给某个 HTML元素设置一个动画，可以通过下面这些属性来控制动画。<br />
+animation-name: 动画的名字，这个是通过 @keyframes 定义的名字，比如 @keyframes 定义如下，那么 animation-name 就为 move。@keyframes 指定某一帧的动画如何变化，可通过 % 来控制各个阶段的属性值，比如 0% 的时候，元素的 left 和 top 都为 0。</p>
+
+<pre><code class="language-CSS">@keyframes move {
+    0% {
+        left: 0;
+        top: 0;
+    }
+    100% {
+        left: 0;
+        top: 0;
+    }
+}
+</code></pre>
+<p>animation-duration：动画的持续时间；<br />
+animation-delay：动画开始时的延迟时间；<br />
+animation-iteration-count：动画循环次数；<br />
+animation-direction：动画的方向，比如 alternate 表示先正向后逆序，nomal 正向，reverse 逆序；<br />
+animation-timing-function：动画的时间曲线，它的值有 ease、ease-in、ease-out、ease-in-out、linear；<br />
+animation-fill-mode：动画执行后的填充模式，它的值有 forwards、backwards、none、both；<br />
+看一个具体的实例，可以给选择器设置一个动画：</p>
+
+<pre><code class="language-CSS">
+</code></pre>
+
+:ET

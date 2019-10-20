@@ -1,0 +1,35 @@
+I"><p>CSS中有两类长度单位，一类是相对单位，另一类是绝对单位。</p>
+<h3 id="相对单位">相对单位</h3>
+<p>相对单位指它的尺寸是相对于另外一个元素的尺寸。常用的是 em、rem、vh、vw、vmin、vmax。理解相对单位的时候需要掌握 font-size 这个 CSS 属性，它表示字体的大小，同时也可以用来计算相对单位的长度。「避免认为 font-size 就是表示字体大小的思维定势」。<br />
+<strong>em</strong>：它是相对于「自身或父元素」的 font-size 来计算自身的尺寸，看一段代码：</p>
+
+<pre><code class="language-HTML">&lt;body&gt;
+    &lt;div class="content"&gt;
+        &lt;div class="title"&gt;&lt;/div&gt;
+    &lt;/div&gt;
+&lt;/body&gt;
+</code></pre>
+<pre><code class="language-HTML">&lt;style&gt;
+body {
+    font-size: 16px;
+}
+.content {
+    width: 200px;
+    height: 300px;
+    font-size: 20px;
+    background-color: #258BD6;
+}
+.title {
+    width: 9em;
+    height: 4em;
+    background-color: #FE7235;
+}
+&lt;/style&gt;
+</code></pre>
+<p>选择器 content 的 font-size 是 20px，在选择器 title 的 width 属性的值为 9em，由于 title 所在的 div 标签父元素是 content 所在的标签，所以 width = 9*font-size=9*20=180px；同理 height = 4*20=80px；如果 title 所在的 div 标签 设置了 font-size，那么 em 计算的值将会依据自身的 font-size 计算。
+<img src="/assets/article_images/2019-10-20-CSS中常用的单位01.png" alt="" /></p>
+
+<p><strong>rem</strong>(font size of root element）: 这个单位是依据「根元素 html 标签」的 font-size 来计算最终的值，这个单位对移动端web开发十分实用，通过设置 html 的 font-size 来等比缩放元素的大小。比如下面的代码，title 所在的 div 标签  width=15*9=135px，<br />
+height=15*4=60px；</p>
+
+:ET

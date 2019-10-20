@@ -1,0 +1,6 @@
+I"<p>CSS中主要有两种方式实现动画：<br />
+1、animation：CSS动画，可设置不同帧的动效；<br />
+2、transition：这种属于过渡动画，也就是说在修改某些 CSS 属性的时候，属性会有一个渐变的过程。</p>
+<h3 id="animation">animation</h3>
+
+:ET

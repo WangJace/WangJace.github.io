@@ -1,0 +1,183 @@
+I"�<p>CSS中主要有两种方式实现动画：<br />
+1、animation：CSS动画，可设置不同帧的动效；<br />
+2、transition：这种属于过渡动画，也就是说在修改某些 CSS 属性的时候，属性会有一个渐变的过程。</p>
+<h3 id="animation">animation</h3>
+<p>animation 是通过 CSS 给某个 HTML元素设置一个动画，可以通过下面这些属性来控制动画。<br />
+animation-name: 动画的名字，这个是通过 @keyframes 定义的名字，比如 @keyframes 定义如下，那么 animation-name 就为 move。@keyframes 指定某一帧的动画如何变化，可通过 % 来控制各个阶段的属性值，比如 0% 的时候，元素的 left 和 top 都为 0。</p>
+
+<pre><code class="language-CSS">@keyframes move {
+    0% {
+        left: 0;
+        top: 0;
+    }
+    100% {
+        left: 0;
+        top: 0;
+    }
+}
+</code></pre>
+<p>animation-duration：动画的持续时间；<br />
+animation-delay：动画开始时的延迟时间；<br />
+animation-iteration-count：动画循环次数；<br />
+animation-direction：动画的方向，比如 alternate 表示先正向后逆序，nomal 正向，reverse 逆序；<br />
+animation-timing-function：动画的时间曲线，它的值有 ease、ease-in、ease-out、ease-in-out、linear；<br />
+animation-fill-mode：动画执行后的填充模式，它的值有 forwards、backwards、none、both；<br />
+看一个具体的实例，可以给选择器设置一个动画：</p>
+
+<pre><code class="language-HTML">&lt;!DOCTYPE html&gt;
+&lt;html lang="en"&gt;
+
+&lt;head&gt;
+    &lt;meta charset="UTF-8"&gt;
+    &lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;
+    &lt;meta http-equiv="X-UA-Compatible" content="ie=edge"&gt;
+    &lt;title&gt;动画&lt;/title&gt;
+    &lt;style&gt;
+        .bg-box {
+            background-color: gray;
+            width: 100px;
+            height: 100px;
+        }
+
+        .bg-box-animation {
+            /* 动画的名字和动画执行的时间，需要把动画绑定到某个选择器上才会执行*/
+            animation: background-change 2s;
+        }
+
+        /* 动画的关键帧 ，帧数可以为任意多个 */
+        @keyframes background-change {
+            0% {
+                background-color: antiquewhite;
+            }
+
+            50% {
+                background-color: brown;
+            }
+
+            100% {
+                background-color: blue;
+            }
+        }
+
+        .move-box {
+            background-color: red;
+            position: relative;
+            width: 60px;
+            height: 60px;
+            border-radius: 30px;
+        }
+
+        .move-box-animation {
+            /* animation: name duration timing-function delay iteration-count direction fill-mode; */
+            /* 名字，为 @keyframes 的名字 */
+            animation-name: move;
+            /*  动画的时间 */
+            animation-duration: 5s;
+            /* 动画执行函数 */
+            animation-timing-function: ease-in-out;
+            /* 动画延迟时间 */
+            animation-delay: 1s;
+            /* 动画重复次数 */
+            animation-iteration-count: 10;
+            /* 动画的方向，先正向后逆向 */
+            animation-direction: alternate;
+            /* 动画执行后的填充模式 */
+            animation-fill-mode: backwards;
+            /* 动画的运行状态 */
+            animation-play-state: running;
+        }
+
+        @keyframes move {
+            0% {
+                left: 0;
+                top: 0;
+            }
+
+            25% {
+                left: 100px;
+                top: 0;
+            }
+
+            50% {
+                left: 100px;
+                top: 100px;
+            }
+
+            75% {
+                left: 0;
+                top: 100px;
+            }
+
+            100% {
+                left: 0;
+                top: 0;
+            }
+        }
+&lt;/style&gt;
+&lt;/head&gt;
+
+&lt;body&gt;
+    &lt;div class="bg-box bg-box-animation"&gt;&lt;/div&gt;
+    &lt;div class="move-box move-box-animation"&gt;&lt;/div&gt;
+&lt;/body&gt;
+
+&lt;/html&gt;
+</code></pre>
+<h3 id="transition">transition</h3>
+<p>transition 是过渡动画，修改某些属性的时候不会立刻生效，它会以动画的形式逐渐过渡到要设置的值。比如设置某个 HTML 元素的背景颜色，修改宽度和高度。</p>
+
+<pre><code class="language-CSS">.move-transition {
+    /* transition-property: all; */
+    transition-property: background-color, height, width;
+    transition-duration: 1.8s, 1.0s, 1.0s;
+    transition-delay: 0.1s;
+    transition-timing-function: linear;
+}
+</code></pre>
+<p>transition-property: 指需要使用过渡动画的属性，这里设置了背景色，高度和宽度。也可以通过关键字 all 设置所有的属性；<br />
+transition-duration: 动画持续的时间，可以单独控制某个属性的时间，transition-duration：1.8s, 1.0s, 1.0s 表示修改 background-color 需要 1.8s, 修改 height 需要 1.0s,  修改 width 需要 1.0s;<br />
+transition-delay：动画开始时需要延迟多长时间才开始执行；<br />
+transition-timing-function：表示动画执行时的时间函数，不同函数走过的曲线不一样；<br />
+看一个完整的示例，运行下面的代码，赶快看看效果吧：</p>
+
+<pre><code class="language-HTML">&lt;!DOCTYPE html&gt;
+&lt;html lang="en"&gt;
+&lt;head&gt;
+    &lt;meta charset="UTF-8"&gt;
+    &lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;
+    &lt;meta http-equiv="X-UA-Compatible" content="ie=edge"&gt;
+    &lt;title&gt;动画&lt;/title&gt;
+    &lt;style&gt;
+        #move-transition-box {
+            background-color: cornflowerblue;
+            width: 100px;
+            height: 100px;
+        }
+        .move-transition {
+            /* transition-property: all; */
+            transition-property: background-color, height, width;
+            transition-duration: 1.8s, 1.0s, 1.0s;
+            transition-delay: 0.1s;
+            transition-timing-function: linear;
+        }
+&lt;/style&gt;
+&lt;/head&gt;
+
+&lt;body&gt;
+    &lt;div id ="move-transition-box" class="move-transition" onclick="scale()"&gt;&lt;/div&gt;
+    &lt;script&gt;
+    function scale() {
+        let tbox = document.getElementById('move-transition-box');
+        tbox.style.height = 200 + 'px';
+        tbox.style.width = 200 + 'px';
+        tbox.style.backgroundColor = 'red';
+    }
+&lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
+<p>当点击方块的时候，方块会变大，颜色逐渐变成红色。</p>
+
+<p>参考：</p>
+
+:ET

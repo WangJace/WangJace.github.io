@@ -1,0 +1,8 @@
+I"�<p>在CSS中，块级元素使用了盒子模型的所有特性，而行内元素只使用了部分特性。一个完整的盒子模型如下：
+<img src="/assets/article_images/2019-10-20-CSS中的盒子模型01.png" alt="" />
+margin（外边距）：它表示盒子之间的距离，可以通过 margin-top、margin-bottom、margin-left、margin-right 来控制各个方向的边距，它们可以为负值；<br />
+border（边框）：表示盒子的边框；<br />
+padding（内边距）：表示与内容之间的距离；<br />
+content（内容）：表示内容的大小；<br />
+盒子模型有两种模式，不同模式对于最终盒子的大小有所不同：</p>
+:ET

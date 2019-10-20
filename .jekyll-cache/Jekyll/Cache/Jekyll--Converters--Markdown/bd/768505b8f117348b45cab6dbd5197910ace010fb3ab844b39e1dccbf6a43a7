@@ -1,0 +1,340 @@
+I"{3<p>CSS中选择器的作用在于「选择」，目的是为了能够把定义好的 CSS 样式作用于指定 HTML 标签上，比如想让 p 标签的字体颜色变为红色。<br />
+CSS 相关的语法可以通过下面这张图来读懂：
+<img src="/assets/article_images/2019-10-20-CSS中的选择器详解01.png" alt="CSS语法图" /></p>
+<blockquote>
+  <p>注意：写 CSS 代码的时候，即使某个属性写错，浏览器也不会报错，只会忽略无法识别的 CSS 样式。</p>
+</blockquote>
+
+<ul>
+  <li>
+    <font color="orange">class 选择器</font>
+    <p>以 “.” 开头，后跟一个名字。在一个HTML中，类选择器可以作用于多个 HTML 标签。</p>
+  </li>
+  <li>
+    <font color="orange">ID 选择器</font>
+    <p>以 “#” 开头，后跟一个选择器的名字，名字必须在当前文档唯一。</p>
+  </li>
+  <li>
+    <font color="orange">通用选择器（Universal selector）</font>
+    <p>单独一个“ * ”，作用于所有的标签。下面的例子，清除 HTML 中所有标签的默认边距。</p>
+  </li>
+</ul>
+
+<pre><code class="language-CSS">* {
+  margin: 0;
+  padding: 0;
+}
+#container {
+  width: 200px;
+  height: 200px;
+  margin: 20px;
+  padding: 20px;
+  background-color: bisque;
+}
+
+.first {
+  color: red;
+  font-weight: 30px;
+  font-size: 30px;
+}
+</code></pre>
+<pre><code class="language-HTML">&lt;div id="container"&gt;
+    &lt;p class="first"&gt;第一段&lt;/p&gt;
+&lt;/div&gt;
+</code></pre>
+<p><img src="/assets/article_images/2019-10-20-CSS中的选择器详解02.png" alt="" /></p>
+
+<ul>
+  <li>
+    <font color="orange">属性选择器（Attribute selectors）</font>
+    <p>根据属性来匹配HTML元素，通过下面的例子你可以明白如何使用属性选择器。</p>
+  </li>
+</ul>
+
+<pre><code class="language-CSS">/* 匹配所有使用属性 "lefe" 的元素 */
+[lefe] {
+    color: green;
+}
+
+/*匹配所有使用属性为 "lefe"，且值为 liquid 的元素*/
+[lefe="liquid"] {
+    background-color: goldenrod;
+}
+
+/*匹配所有使用属性为 "lefe"，且值包含 spicy 的元素*/
+[lefe~="spicy"] {
+    color: red;
+}
+</code></pre>
+<p>还有类似于“正则表达式”的属性选择器，比如：[attr^=val] 匹配以 val 开头的元素，[attr$=val] ,匹配以 val 结尾的元素，[attr*=val]匹配包含 val 的字符串的元素。</p>
+
+<pre><code class="language-HTML">&lt;body&gt;
+    &lt;ul&gt;
+        &lt;li data-quantity="1kg" lefe&gt;Tomatoes&lt;/li&gt;
+        &lt;li data-quantity="3" lefe&gt;Onions&lt;/li&gt;
+        &lt;li data-quantity="3" lefe&gt;Garlic&lt;/li&gt;
+        &lt;li data-quantity="700g" lefe="not spicy like chili"&gt;Red pepper&lt;/li&gt;
+        &lt;li data-quantity="2kg" data-meat&gt;Chicken&lt;/li&gt;
+        &lt;li data-quantity="optional 150g" data-meat&gt;Bacon bits&lt;/li&gt;
+        &lt;li data-quantity="optional 10ml" lefe="liquid"&gt;Olive oil&lt;/li&gt;
+        &lt;li data-quantity="25cl" lefe="liquid"&gt;White wine&lt;/li&gt;
+    &lt;/ul&gt;
+&lt;/body&gt;
+</code></pre>
+<p><img src="/assets/article_images/2019-10-20-CSS中的选择器详解03.png" alt="" /></p>
+
+<ul>
+  <li>
+    <font color="orange">伪选择器（pseudo-selectors）</font>
+    <p>它包含伪类（pseudo-classes）和伪元素（pseudo-elements）。这类选择器不是真正意义上的选择器，它作为选择器的一部分，起到选择器匹配元素的限定条件。比如，匹配 dom 树中某个元素的第一个孩子，匹配鼠标点击后的状态等。</p>
+  </li>
+</ul>
+
+<pre><code class="language-CSS">/* 匹配超链接样式 */
+a {
+    color: blue;
+    font-weight: bold;
+}
+
+/* 访问后的状态 */
+a:visited {
+    color: yellow;
+}
+
+/* 鼠标悬停、点击、聚焦时的样式 */
+a:hover,
+a:active,
+a:focus {
+    color: darkred;
+    text-decoration: none;
+}
+</code></pre>
+<pre><code class="language-HTML">&lt;a href="https://developer.mozilla.org/" target="_blank"&gt;Click me&lt;/a&gt;
+</code></pre>
+<p>伪元素（pseudo-elements）选择器，它以“ :: ” 为标识符。比如修改首字母的样式。在超链接后添加一个向上的弯曲的箭头</p>
+
+<pre><code class="language-CSS">p::first-letter{
+  font-weight: bold;
+}
+p::first-line{
+  font-size: 3em;
+}
+</code></pre>
+<pre><code class="language-CSS">[href^=http]::after {
+  content: '⤴';
+}
+</code></pre>
+<p><img src="/assets/article_images/2019-10-20-CSS中的选择器详解04.png" alt="" /></p>
+
+<ul>
+  <li>
+    <font color="orange">组合选择器（Combinators）</font>
+    <p>这种选择器可以作用于多个 HTML 元素，有多种组合方式，下面这些方式，CSS 都会作用于 B 元素。通过下面的例子来讲解这些选择器，例子类似于一个树形，表示不同的层级：
+<img src="/assets/article_images/2019-10-20-CSS中的选择器详解05.png" alt="" />
+代码如下：</p>
+  </li>
+</ul>
+
+<pre><code class="language-HTML">&lt;body&gt;
+    &lt;div&gt;
+        &lt;p&gt;|__div-&gt;p1&lt;/p&gt;
+        &lt;p&gt;|__div-&gt;p2&lt;/p&gt;
+        &lt;section&gt;
+            &lt;p&gt;|_____div-&gt;section-&gt;p&lt;/p&gt;
+            &lt;p&gt;|_____div-&gt;section-&gt;p&lt;/p&gt;
+            &lt;div&gt;|_____div-&gt;section-&gt;div&lt;/div&gt;
+        &lt;/section&gt;
+    &lt;/div&gt;
+    &lt;p&gt;|__p1&lt;/p&gt;
+    &lt;p&gt;|__p2&lt;/p&gt;
+&lt;/body&gt;
+</code></pre>
+<p><strong>A B {}</strong> : A 元素的所有后代元素 B 都会起作用。下面的例子中 div p {}，它会遍历 div 中所有的子元素 p，只要找到 p 元素就应用对应的 CSS 样式，故所有的  p 元素都变成了红色；</p>
+
+<pre><code class="language-CSS">div p {
+    color: red;
+}
+</code></pre>
+<p><img src="/assets/article_images/2019-10-20-CSS中的选择器详解06.png" alt="" />
+<strong>A &gt; B {}</strong> : A 元素的直接子节点会起作用，也就是只适用于 A 节点的第一层所有的子节点。例子中 div &gt; p { } , 只会找到 div 的第一层子节点 p。</p>
+
+<pre><code class="language-CSS">div &gt; p {
+    color: red;
+}
+</code></pre>
+<p><img src="/assets/article_images/2019-10-20-CSS中的选择器详解07.png" alt="" />
+<strong>A + B {}</strong> : 匹配 A 的下一个兄弟节点，AB具有相同的父节点，并且 B 紧跟在 A 的后面；例子中 div + p { } 只会匹配 div 的下一个兄弟节点 p；</p>
+
+<pre><code class="language-CSS">div + p {
+    color: red;
+}
+</code></pre>
+<p><img src="/assets/article_images/2019-10-20-CSS中的选择器详解08.png" alt="" />
+<strong>A ~ B {}</strong> : B是 A 之后的任意一个兄弟节点。例子中 div ~ p { } 会匹配 div 的所有兄弟节点 p；</p>
+
+<pre><code class="language-CSS">div ~ p {
+    color: red;
+}
+</code></pre>
+<p><img src="/assets/article_images/2019-10-20-CSS中的选择器详解09.png" alt="" /></p>
+
+<ul>
+  <li>
+    <font color="orange">组选择器 A, B</font>
+    <p>A 和 B 元素具有同一规则的 CSS 样式，不同元素使用逗号隔开。</p>
+  </li>
+</ul>
+
+<pre><code class="language-CSS">div,p {
+    color: red;
+}
+</code></pre>
+<p>以上就是所有与 CSS 样式和选择器相关的内容。这部分内容很基础但很重要。</p>
+<h2 id="规则">@规则</h2>
+<p>@规则在CSS中用于传递元数据、条件信息或其他描述性信息。它们以at符号（@）开头，后跟一个标识符来说明它是什么类型的规则，然后是某种类型的语法块，以分号（；）结尾。由标识符定义的每种类型的 at 规则都有其自己的内部语法和语义。</p>
+
+<pre><code class="language-CSS">@charset and @import (metadata)
+@media or @document (条件，嵌套申明)
+@font-face (描述信息
+</code></pre>
+<p>下面这个 CSS 只适用于屏幕超过 800px 的设备：</p>
+
+<pre><code class="language-CSS">@media (min-width: 801px) {
+  body {
+    margin: 0 auto;
+    width: 800px;
+  }
+}
+</code></pre>
+<h2 id="扩展">扩展</h2>
+<blockquote>
+  <p>这个选择器的作用是针对这个div标签的父元素的首个子元素的所有div标签，对吗？</p>
+</blockquote>
+
+<pre><code class="language-CSS">div :first-child {
+  margin-left: 15px;
+}
+</code></pre>
+<blockquote>
+  <p>所以在这一段里面，这个选择器并没有发挥作用？因为div并不是他的父元素&lt;body&gt;的首个子元素？</p>
+</blockquote>
+
+<pre><code class="language-HTML">&lt;body&gt;
+  &lt;h1 class="title"&gt;《前端小课》&lt;/h1&gt;
+  &lt;div class="line"&gt;&lt;/div&gt;
+  &lt;div id="nav-box"&gt;
+      &lt;span id="a"&gt;超越技术&lt;/span&gt;
+      &lt;span id="b"&gt;数据结构&lt;/span&gt;
+      &lt;span id="c"&gt;前端小课&lt;/span&gt;
+      &lt;span id="d"&gt;知识小集&lt;/span&gt;
+      &lt;span id="e"&gt;iOS开发&lt;/span&gt;
+      &lt;span id="f"&gt;算法&lt;/span&gt;
+  &lt;/div&gt;
+  &lt;!-- 点击事件 --&gt;
+  &lt;div id="button" onclick="clickScroll()"&gt;点击滚动菜单&lt;/div&gt;
+&lt;/body&gt;
+</code></pre>
+<p>MDN中关于 <em>:first-child</em> 的描述：</p>
+<blockquote>
+  <p>The :first-child CSS pseudo-class 
+represents the first element among a group of sibling elements.</p>
+</blockquote>
+
+<p>它的意思是 :first-child 匹配兄弟姐妹中第一个元素。然后 MDN 上举了一个例子：</p>
+
+<pre><code class="language-CSS">/* Selects any &lt;p&gt; that is the first element
+   among its siblings */
+p:first-child {
+  color: lime;
+}
+</code></pre>
+<p>注释中的话：
+Selects any &lt;p&gt; that is the first element among its siblings 
+这句话的意思是选择「所有」「孩子节点」是「p」的元素。<br />
+首先需要明确什么是 siblings ，它的中文意思是兄弟姐妹，这里的兄弟姐妹是指树这种数据结构中的兄弟姐妹。在 HTML 中，页面是由一颗树组成。想要彻底理解这里面涉及到的知识，需要掌握「树」这种数据结构，一图胜千言。
+<img src="/assets/article_images/2019-10-20-CSS中的选择器详解10.png" alt="" />
+从图中可以明确，p:first-child 选择的是孩子节点中第一个元素是 p 的元素。所以被选中的元素为下图中「突出」显示的元素。
+<img src="/assets/article_images/2019-10-20-CSS中的选择器详解11.png" alt="" />
+为这个问题，准备了一个例子：</p>
+
+<pre><code class="language-HTML">&lt;!DOCTYPE html&gt;
+&lt;html lang="en"&gt;
+&lt;head&gt;
+    &lt;meta charset="UTF-8"&gt;
+    &lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;
+    &lt;title&gt;FirstChild&lt;/title&gt;
+    &lt;style&gt;
+        .box,
+        .box2,
+        #box3 {
+            background-color: #eeeeee;
+            padding: 10px;
+            margin-bottom: 10px;
+        }
+&lt;/style&gt;
+&lt;/head&gt;
+
+&lt;body&gt;
+    &lt;p&gt;贵在坚持&lt;/p&gt;
+    &lt;div class="box"&gt;
+        &lt;p&gt;前端小课&lt;/p&gt;
+        &lt;p&gt;超越技术&lt;/p&gt;
+        &lt;p&gt;每日一课&lt;/p&gt;
+    &lt;/div&gt;
+
+    &lt;div class="box2"&gt;
+        &lt;h2&gt;中秋节快乐&lt;/h2&gt;
+        &lt;p&gt;花好月圆&lt;/p&gt;
+    &lt;/div&gt;
+
+    &lt;div id="box3"&gt;
+        &lt;p&gt;早上好！&lt;/p&gt;
+        &lt;h3&gt;前端小课，每日一课&lt;/h3&gt;
+    &lt;/div&gt;
+&lt;/body&gt;
+
+&lt;/html&gt;
+</code></pre>
+<p>这段 HTML 对应的树状结构如下：
+<img src="/assets/article_images/2019-10-20-CSS中的选择器详解12.png" alt="" />
+<strong>1</strong>.匹配元素的第一个孩子是 p 的所有元素：</p>
+
+<pre><code class="language-CSS">p:first-child {
+    color: red;
+    background-color: black;
+    padding: 10px;
+}
+</code></pre>
+<p><img src="/assets/article_images/2019-10-20-CSS中的选择器详解13.png" alt="" />
+<img src="/assets/article_images/2019-10-20-CSS中的选择器详解14.png" alt="" />
+<strong>2</strong>.匹配元素的第二个孩子是 div 的所有元素：</p>
+
+<pre><code class="language-CSS">div:nth-child(2) {
+    background-color: cornflowerblue;
+    color: white;
+}
+</code></pre>
+<p><img src="/assets/article_images/2019-10-20-CSS中的选择器详解15.png" alt="" />
+<img src="/assets/article_images/2019-10-20-CSS中的选择器详解16.png" alt="" />
+<strong>3</strong>.匹配选择器为 .box2 的第一个孩子：</p>
+
+<pre><code class="language-CSS">.box2 :nth-child(1) {
+    background-color: red;
+    color: white;
+}
+</code></pre>
+<p><img src="/assets/article_images/2019-10-20-CSS中的选择器详解17.png" alt="" />
+<strong>4</strong>.匹配选择器为 #box3 的第一个孩子：</p>
+
+<pre><code class="language-CSS">#box3 :nth-child(1) {
+    background-color: #0077FF;
+    color: white;
+}
+</code></pre>
+<p><img src="/assets/article_images/2019-10-20-CSS中的选择器详解18.png" alt="" /></p>
+
+<p>参考：
+<a href="https://mp.weixin.qq.com/s?__biz=MzI5MTY0ODAwNQ==&amp;mid=2247484022&amp;idx=1&amp;sn=ad15f8ea96ca947bb5d87b6b0683809b&amp;scene=19#wechat_redirect">第7天：CSS中的选择器详解</a>
+<a href="https://mp.weixin.qq.com/s?__biz=MzI5MTY0ODAwNQ==&amp;mid=2247484057&amp;idx=1&amp;sn=3becbefb82083dade574051504a409af&amp;chksm=ec0c25f3db7bace5013991bb4e06d450a2ea1e0a38b018903c9113a005dd9047a6e590b784d8&amp;scene=21#wechat_redirect">群里讨论的一个选择器问题（一定要看）</a></p>
+
+:ET
