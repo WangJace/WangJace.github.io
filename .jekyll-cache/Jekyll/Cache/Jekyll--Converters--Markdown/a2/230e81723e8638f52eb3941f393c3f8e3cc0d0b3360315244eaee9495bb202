@@ -1,0 +1,20 @@
+I"F<p>本文主要介绍一下如何使用 <em>Core Plot</em> 在视图中呈现一个柱状图。<br />
+不管是柱状图还是线形图，抑或是饼状图，都得首先声明一个 <em>CPTGraphHostingView</em>，这是图表的视图空间，直接添加到相应的 <em>UIView</em> 上。</p>
+<pre><code class="language-Objective-C">@property (nonatomic, strong) CPTGraphHostingView *hostingView;
+</code></pre>
+<p>接下来就开始初始化 <em>CPTGraph</em>
+```Objective-C</p>
+<ul>
+  <li>(void)viewDidLayoutSubviews {
+  [super viewDidLayoutSubviews];
+  // 先获取_hostingView.hostedGraph，如果为nil才去进行CPTGraph的初始化，同时进行plot和坐标轴的设置
+  CPTGraph *graph = _hostingView.hostedGraph;
+  if (!graph) {
+      [self setPlot];
+  }
+  else {
+      graph.frame = _hostingView.bounds;
+  }
+}</li>
+</ul>
+:ET

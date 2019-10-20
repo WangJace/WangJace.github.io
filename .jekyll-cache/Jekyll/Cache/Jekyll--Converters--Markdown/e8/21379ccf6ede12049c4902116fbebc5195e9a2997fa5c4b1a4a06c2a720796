@@ -1,0 +1,59 @@
+I"&<p>使用 <em>Core Plot</em> 绘制线形图实际上与绘制柱状图差不多的，都是先创建 <em>CPTGraphHostingView</em>，然后初始化 <em>CPTGraph</em>，设置坐标轴和 <em>plotSpace</em>，不同的是在初始化 <em>plot</em> 和代理方法的实现上有些不一样。所以下面就只讲解不同的部分，其他的移步<a href="http://blog.wangjace.site/2018/11/Core-Plot%E7%9A%84%E4%BD%BF%E7%94%A8(%E4%BA%8C)-%E6%9F%B1%E7%8A%B6%E5%9B%BE/">上一篇</a>文章</p>
+<pre><code class="language-Objective-C">// 初始化plot
+CPTScatterPlot *linePlot = [[CPTScatterPlot alloc] init];
+linePlot.dataSource = self;
+linePlot.identifier = @"LineChart";       // 线形图的标识符
+// 设置线条风格，可选类型：CPTScatterPlotInterpolationLinear、CPTScatterPlotInterpolationStepped、CPTScatterPlotInterpolationHistogram、CPTScatterPlotInterpolationCurved
+linePlot.interpolation = CPTScatterPlotInterpolationCurved;     // 如果想要折线图的效果可以使用CPTScatterPlotInterpolationLinear
+lineStyle.lineColor = LineChartDefaultColor(1.0);     // 设置线条颜色
+linePlot.dataLineStyle = lineStyle;       // 设置线条风格
+
+// 设置渐变色
+CPTGradient *areaGradient = [CPTGradient gradientWithBeginningColor:LineChartDefaultColor(0.6)
+                                                            endingColor:LineChartDefaultColor(0.2)];
+areaGradient.angle = -90.0f;     // 渐变色的方向，水平向右为0度，顺时针方向为负方向，逆时针方向为正方向
+CPTFill * areaGradientFill  = [CPTFill fillWithGradient:areaGradient];
+linePlot.areaFill = areaGradientFill;
+linePlot.areaBaseValue = @0; // 渐变色的起点位置
+[graph addPlot:linePlot];
+</code></pre>
+<p><img src="/assets/article_images/2018-11-23-Core Plot的使用(三)：线形图.png" alt="线形图" />
+如果只想保留线条，不出现其他的颜色快，不设置 <em>areaFill</em> 属性即可。而线条的如果想设置为虚线只需要设置 <em>linePlot</em> 的dataLineStyle就行了</p>
+<pre><code class="language-Objective-C">// 设置线形图线条风格
+lineStyle = [[CPTMutableLineStyle alloc] init];
+lineStyle.lineColor = LineChartColor(1.0);
+lineStyle.lineWidth = 1.0;
+lineStyle.dashPattern = @[@10, @5];       // 10为虚线每个小线段的长度，5为虚线每个小线段的距离
+linePlot.dataLineStyle = lineStyle;       // 设置线条风格
+</code></pre>
+<p>有时候会需要在线形图的拐点添加一些圆点，可以通过添加 <em>CPTPlotSymbol</em> 实现</p>
+<pre><code class="language-Objective-C">// 添加拐点
+// 符号类型：椭圆
+CPTPlotSymbol *plotSymbol = [CPTPlotSymbol ellipsePlotSymbol];
+// 符号大小
+plotSymbol.size = CPTSizeMake(5, 5);
+// 符号填充色
+plotSymbol.fill = [CPTFill fillWithColor:LineChartColor(1)];
+// 边框设置
+CPTMutableLineStyle *symboLineStyle = [[ CPTMutableLineStyle alloc ] init];
+symboLineStyle.lineColor = LineChartColor(1.0);
+symboLineStyle.lineWidth = 1;
+plotSymbol.lineStyle = symboLineStyle;       
+// 向图形上加入符号
+linePlot.plotSymbol = plotSymbol;      
+// 设置拐点的外沿范围，以用来扩大检测手指的触摸范围
+linePlot.plotSymbolMarginForHitDetection = CPTFloat(5);
+</code></pre>
+<p>并可以通过代理方法实现拐点的点击响应处理</p>
+<pre><code class="language-Objective-C">- (void)scatterPlot:(CPTScatterPlot *)plot plotSymbolTouchUpAtRecordIndex:(NSUInteger)idx {
+    NSLog(@"index = %lu", (unsigned long)idx);
+}
+</code></pre>
+
+<p>相关代码可以到<a href="https://github.com/WangJace/CorePlotExample">这里</a>下载.</p>
+
+<p>相关文章：<br />
+<a href="http://blog.wangjace.site/2018/11/Core-Plot%E7%9A%84%E4%BD%BF%E7%94%A8(%E4%B8%80)-%E5%9F%BA%E7%A1%80%E7%AF%87/">Core Plot的使用(一)：基础篇</a><br />
+<a href="http://blog.wangjace.site/2018/11/Core-Plot%E7%9A%84%E4%BD%BF%E7%94%A8(%E4%BA%8C)-%E6%9F%B1%E7%8A%B6%E5%9B%BE/">Core Plot的使用(二)：柱状图</a><br />
+<a href="https://www.wangjace.cn/2018/11/Core-Plot%E7%9A%84%E4%BD%BF%E7%94%A8(%E4%B8%89)-%E7%BA%BF%E5%BD%A2%E5%9B%BE/">Core Plot的使用(三)：线形图</a></p>
+:ET

@@ -1,0 +1,293 @@
+I"Ej<p>RxSwift中可订阅序列会给订阅者发送的事件类型有Next、Error、Completed，Next为正常的事件，当出现错误时发送Error，当完成时发送Completed。</p>
+<h3 id="-创建可订阅事件流的几种方式">• 创建可订阅事件流的几种方式</h3>
+<h4 id="1nerver">1.nerver</h4>
+<p>不发松任何事件的可订阅事件流，下面这段代码不会打印任何东西，因为never不会发送任何时间给订阅者，所以订阅者的代码块不会被执行，即不会打印 <em>This will never be printed</em> 。</p>
+
+<figure class="highlight"><pre><code class="language-swift" data-lang="swift"><span class="k">let</span> <span class="nv">neverSequence</span> <span class="o">=</span> <span class="kt">Observable</span><span class="o">&lt;</span><span class="kt">String</span><span class="o">&gt;.</span><span class="nf">never</span><span class="p">()</span>
+<span class="k">let</span> <span class="nv">neverSequenceSubscription</span> <span class="o">=</span> <span class="n">neverSequence</span>
+                                    <span class="o">.</span><span class="n">subscribe</span> <span class="p">{</span> <span class="n">_</span> <span class="k">in</span>
+                                        <span class="nf">print</span><span class="p">(</span><span class="s">"This will never be printed"</span><span class="p">)</span>
+                                    <span class="p">}</span>
+<span class="n">neverSequenceSubscription</span><span class="o">.</span><span class="nf">disposed</span><span class="p">(</span><span class="nv">by</span><span class="p">:</span> <span class="kt">DisposeBag</span><span class="p">())</span></code></pre></figure>
+
+<h4 id="2empty">2.empty</h4>
+<p>只发送 <em>completed</em> 事件的可订阅事件流。下面这段代码只会打印 <em>completed</em> 。</p>
+
+<figure class="highlight"><pre><code class="language-swift" data-lang="swift"><span class="kt">Observable</span><span class="o">&lt;</span><span class="kt">Int</span><span class="o">&gt;.</span><span class="nf">empty</span><span class="p">()</span>
+    <span class="o">.</span><span class="n">subscribe</span> <span class="p">{</span> <span class="n">event</span> <span class="k">in</span>
+        <span class="nf">print</span><span class="p">(</span><span class="n">event</span><span class="p">)</span>
+        <span class="cm">/* 
+         completed
+         */</span>
+    <span class="p">}</span>
+    <span class="o">.</span><span class="nf">disposed</span><span class="p">(</span><span class="nv">by</span><span class="p">:</span> <span class="kt">DisposeBag</span><span class="p">())</span></code></pre></figure>
+
+<h4 id="3just">3.just</h4>
+<p>只发送一个事件的可订阅事件流。</p>
+
+<figure class="highlight"><pre><code class="language-swift" data-lang="swift"><span class="kt">Observable</span><span class="o">.</span><span class="nf">just</span><span class="p">(</span><span class="s">"🔴"</span><span class="p">)</span>
+    <span class="o">.</span><span class="n">subscribe</span> <span class="p">{</span> <span class="n">event</span> <span class="k">in</span>
+    <span class="nf">print</span><span class="p">(</span><span class="n">event</span><span class="p">)</span>
+    <span class="cm">/* 
+     next(🔴)
+     completed
+     */</span>
+    <span class="p">}</span>
+    <span class="o">.</span><span class="nf">disposed</span><span class="p">(</span><span class="nv">by</span><span class="p">:</span> <span class="kt">DisposeBag</span><span class="p">())</span></code></pre></figure>
+
+<h4 id="4of">4.of</h4>
+<p>发送一定数量事件的可订阅事件流.</p>
+
+<figure class="highlight"><pre><code class="language-swift" data-lang="swift"><span class="kt">Observable</span><span class="o">.</span><span class="nf">of</span><span class="p">(</span><span class="s">"🐶"</span><span class="p">,</span> <span class="s">"🐱"</span><span class="p">,</span> <span class="s">"🐭"</span><span class="p">,</span> <span class="s">"🐹"</span><span class="p">)</span>
+    <span class="o">.</span><span class="nf">subscribe</span><span class="p">({</span> <span class="n">event</span> <span class="k">in</span>
+        <span class="nf">print</span><span class="p">(</span><span class="n">event</span><span class="p">)</span>
+        <span class="cm">/*
+         next(🐶)
+         next(🐱)
+         next(🐭)
+         next(🐹)
+         completed
+         */</span>
+    <span class="p">})</span>
+    <span class="o">.</span><span class="nf">disposed</span><span class="p">(</span><span class="nv">by</span><span class="p">:</span> <span class="kt">DisposeBag</span><span class="p">())</span></code></pre></figure>
+
+<h4 id="5from">5.from</h4>
+<p>获取一个队列（Array、Dictionary、Set）中的元素并转为一个个的事件发送的可订阅事件流。</p>
+
+<figure class="highlight"><pre><code class="language-swift" data-lang="swift"><span class="kt">Observable</span><span class="o">.</span><span class="nf">from</span><span class="p">([</span><span class="s">"🐶"</span><span class="p">,</span> <span class="s">"🐱"</span><span class="p">,</span> <span class="s">"🐭"</span><span class="p">,</span> <span class="s">"🐹"</span><span class="p">])</span>
+    <span class="o">.</span><span class="nf">subscribe</span><span class="p">({</span>
+        <span class="nf">print</span><span class="p">(</span><span class="nv">$0</span><span class="p">)</span>     <span class="c1">// 语法糖: $0代表的是代码块的第一个参数，若有多个参数，则使用$0、$1、$2，依此类推。</span>
+        <span class="cm">/*
+         next(🐶)
+         next(🐱)
+         next(🐭)
+         next(🐹)
+         completed
+        */</span>
+    <span class="p">})</span>
+    <span class="o">.</span><span class="nf">disposed</span><span class="p">(</span><span class="nv">by</span><span class="p">:</span> <span class="kt">DisposeBag</span><span class="p">())</span></code></pre></figure>
+
+<p>若队列元素仍为队列，from不会进一步解析。from只进行一层解析。</p>
+
+<figure class="highlight"><pre><code class="language-swift" data-lang="swift"><span class="kt">Observable</span><span class="o">.</span><span class="nf">from</span><span class="p">([[</span><span class="s">"🐶"</span><span class="p">,</span> <span class="s">"🐱"</span><span class="p">,</span> <span class="s">"🐭"</span><span class="p">,</span> <span class="s">"🐹"</span><span class="p">],</span> <span class="p">[</span><span class="s">"🍎"</span><span class="p">,</span> <span class="s">"🍐"</span><span class="p">,</span> <span class="s">"🍊"</span><span class="p">,</span> <span class="s">"🍋"</span><span class="p">]])</span>
+    <span class="o">.</span><span class="nf">subscribe</span><span class="p">({</span>
+        <span class="nf">print</span><span class="p">(</span><span class="nv">$0</span><span class="p">)</span>
+        <span class="cm">/*
+         next(["🐶", "🐱", "🐭", "🐹"])
+         next(["🍎", "🍐", "🍊", "🍋"])
+         completed
+         */</span>
+    <span class="p">})</span>
+    <span class="o">.</span><span class="nf">disposed</span><span class="p">(</span><span class="nv">by</span><span class="p">:</span> <span class="kt">DisposeBag</span><span class="p">())</span></code></pre></figure>
+
+<p>from和of的区别：of是将传入的每个元素转为事件发送，from是将传入的队列元素取出，一一转为事件发送。</p>
+
+<figure class="highlight"><pre><code class="language-swift" data-lang="swift"><span class="c1">// of</span>
+<span class="kt">Observable</span><span class="o">.</span><span class="nf">of</span><span class="p">([</span><span class="s">"🐶"</span><span class="p">,</span> <span class="s">"🐱"</span><span class="p">,</span> <span class="s">"🐭"</span><span class="p">,</span> <span class="s">"🐹"</span><span class="p">],</span> <span class="p">[</span><span class="s">"🍎"</span><span class="p">,</span> <span class="s">"🍐"</span><span class="p">,</span> <span class="s">"🍊"</span><span class="p">,</span> <span class="s">"🍋"</span><span class="p">])</span>
+    <span class="o">.</span><span class="nf">subscribe</span><span class="p">({</span>
+        <span class="nf">print</span><span class="p">(</span><span class="nv">$0</span><span class="p">)</span>
+        <span class="cm">/*
+         next(["🐶", "🐱", "🐭", "🐹"])
+         next(["🍎", "🍐", "🍊", "🍋"])
+         completed
+         */</span>
+    <span class="p">})</span>
+    <span class="o">.</span><span class="nf">disposed</span><span class="p">(</span><span class="nv">by</span><span class="p">:</span> <span class="kt">DisposeBag</span><span class="p">())</span></code></pre></figure>
+
+<h4 id="6create">6.create</h4>
+<p>创建一个自定义的可订阅事件流。</p>
+
+<figure class="highlight"><pre><code class="language-swift" data-lang="swift"><span class="k">let</span> <span class="nv">myJust</span> <span class="o">=</span> <span class="p">{</span> <span class="p">(</span><span class="nv">element</span><span class="p">:</span> <span class="kt">String</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Observable</span><span class="o">&lt;</span><span class="kt">String</span><span class="o">&gt;</span> <span class="k">in</span>
+    <span class="k">return</span> <span class="kt">Observable</span><span class="o">.</span><span class="n">create</span> <span class="p">{</span> <span class="n">observer</span> <span class="k">in</span>
+                <span class="n">observer</span><span class="o">.</span><span class="nf">on</span><span class="p">(</span><span class="o">.</span><span class="nf">next</span><span class="p">(</span><span class="n">element</span><span class="p">))</span>
+                <span class="n">observer</span><span class="o">.</span><span class="nf">on</span><span class="p">(</span><span class="o">.</span><span class="n">completed</span><span class="p">)</span>
+                <span class="k">return</span> <span class="kt">Disposables</span><span class="o">.</span><span class="nf">create</span><span class="p">()</span>
+            <span class="p">}</span>
+    <span class="p">}</span>
+<span class="nf">myJust</span><span class="p">(</span><span class="s">"🔴"</span><span class="p">)</span>
+    <span class="o">.</span><span class="n">subscribe</span> <span class="p">{</span>
+        <span class="nf">print</span><span class="p">(</span><span class="nv">$0</span><span class="p">)</span>
+        <span class="cm">/*
+         next(🔴)
+         completed
+        */</span>
+    <span class="p">}</span>
+    <span class="o">.</span><span class="nf">disposed</span><span class="p">(</span><span class="nv">by</span><span class="p">:</span> <span class="kt">DisposeBag</span><span class="p">())</span></code></pre></figure>
+
+<h4 id="7range">7.range</h4>
+<p>创建发送一连串有序数字事件的可订阅事件流。</p>
+
+<figure class="highlight"><pre><code class="language-swift" data-lang="swift"><span class="kt">Observable</span><span class="o">.</span><span class="nf">range</span><span class="p">(</span><span class="nv">start</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="nv">count</span><span class="p">:</span> <span class="mi">5</span><span class="p">)</span>
+    <span class="o">.</span><span class="n">subscribe</span> <span class="p">{</span>
+        <span class="nf">print</span><span class="p">(</span><span class="nv">$0</span><span class="p">)</span>
+        <span class="cm">/*
+         next(1)
+         next(2)
+         next(3)
+         next(4)
+         next(5)
+         completed
+        */</span>
+    <span class="p">}</span>
+    <span class="o">.</span><span class="nf">disposed</span><span class="p">(</span><span class="nv">by</span><span class="p">:</span> <span class="kt">DisposeBag</span><span class="p">())</span></code></pre></figure>
+
+<h4 id="8repeatelement">8.repeatElement</h4>
+<p>重复发送n次一个特定事件的可订阅事件流。</p>
+
+<figure class="highlight"><pre><code class="language-swift" data-lang="swift"><span class="kt">Observable</span><span class="o">.</span><span class="nf">repeatElement</span><span class="p">(</span><span class="s">"🔴"</span><span class="p">)</span>
+    <span class="o">.</span><span class="nf">take</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>     <span class="c1">// 定义重复发送的次数</span>
+    <span class="o">.</span><span class="nf">subscribe</span><span class="p">({</span>
+        <span class="nf">print</span><span class="p">(</span><span class="nv">$0</span><span class="p">)</span>
+        <span class="cm">/*
+         next(🔴)
+         next(🔴)
+         next(🔴)
+         completed
+        */</span>
+    <span class="p">})</span>
+    <span class="o">.</span><span class="nf">disposed</span><span class="p">(</span><span class="nv">by</span><span class="p">:</span> <span class="kt">DisposeBag</span><span class="p">())</span></code></pre></figure>
+
+<h4 id="9generate">9.generate</h4>
+<p>循环改变初始值，判断初始值在判断条件的结果是否为true来控制事件的发送。</p>
+
+<figure class="highlight"><pre><code class="language-swift" data-lang="swift"><span class="kt">Observable</span><span class="o">.</span><span class="nf">generate</span><span class="p">(</span>
+    <span class="nv">initialState</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+    <span class="nv">condition</span><span class="p">:</span> <span class="p">{</span> <span class="nv">$0</span> <span class="o">&lt;</span> <span class="mi">3</span> <span class="p">},</span>
+    <span class="nv">iterate</span><span class="p">:</span> <span class="p">{</span> <span class="nv">$0</span> <span class="o">+</span> <span class="mi">1</span> <span class="p">}</span>
+    <span class="p">)</span>
+    <span class="o">.</span><span class="nf">subscribe</span><span class="p">({</span>
+        <span class="nf">print</span><span class="p">(</span><span class="nv">$0</span><span class="p">)</span>
+        <span class="cm">/*
+         next(0)
+         next(1)
+         next(2)
+         completed
+        */</span>
+    <span class="p">})</span>
+    <span class="o">.</span><span class="nf">disposed</span><span class="p">(</span><span class="nv">by</span><span class="p">:</span> <span class="kt">DisposeBag</span><span class="p">())</span></code></pre></figure>
+
+<h3 id="-subject">• Subject</h3>
+<p>Subject既能作为可订阅的事件流，也可以作为订阅者的。</p>
+<h4 id="1publishsubject">1.PublishSubject</h4>
+<p>PublishSubject作为订阅者的时候只能接收订阅之后发送的事件。</p>
+
+<figure class="highlight"><pre><code class="language-swift" data-lang="swift"><span class="k">let</span> <span class="nv">disposeBag</span> <span class="o">=</span> <span class="kt">DisposeBag</span><span class="p">()</span>
+<span class="k">let</span> <span class="nv">subject</span> <span class="o">=</span> <span class="kt">PublishSubject</span><span class="o">&lt;</span><span class="kt">String</span><span class="o">&gt;</span><span class="p">()</span>
+<span class="n">subject</span><span class="o">.</span><span class="nf">subscribe</span><span class="p">({</span>
+    <span class="nf">print</span><span class="p">(</span><span class="s">"Subscription:1, Event:"</span><span class="p">,</span><span class="nv">$0</span><span class="p">);</span>
+<span class="p">})</span><span class="o">.</span><span class="nf">disposed</span><span class="p">(</span><span class="nv">by</span><span class="p">:</span> <span class="n">disposeBag</span><span class="p">)</span>
+<span class="n">subject</span><span class="o">.</span><span class="nf">onNext</span><span class="p">(</span><span class="s">"🐶"</span><span class="p">)</span>
+<span class="n">subject</span><span class="o">.</span><span class="nf">onNext</span><span class="p">(</span><span class="s">"🐱"</span><span class="p">)</span>
+<span class="n">subject</span><span class="o">.</span><span class="nf">subscribe</span><span class="p">({</span>
+    <span class="nf">print</span><span class="p">(</span><span class="s">"Subscription:2, Event:"</span><span class="p">,</span><span class="nv">$0</span><span class="p">);</span>
+<span class="p">})</span><span class="o">.</span><span class="nf">disposed</span><span class="p">(</span><span class="nv">by</span><span class="p">:</span> <span class="n">disposeBag</span><span class="p">)</span>
+<span class="n">subject</span><span class="o">.</span><span class="nf">onNext</span><span class="p">(</span><span class="s">"🅰️"</span><span class="p">)</span>
+<span class="n">subject</span><span class="o">.</span><span class="nf">onNext</span><span class="p">(</span><span class="s">"🅱️"</span><span class="p">)</span>
+<span class="cm">/*
+ Subscription:1, Event: next(🐶)
+ Subscription:1, Event: next(🐱)
+ Subscription:1, Event: next(🅰️)
+ Subscription:2, Event: next(🅰️)
+ Subscription:1, Event: next(🅱️)
+ Subscription:2, Event: next(🅱️)
+*/</span></code></pre></figure>
+
+<h4 id="2replaysubject">2.ReplaySubject</h4>
+<p>ReplaySubject作为订阅者的时候，不仅接收订阅之后发送的事件，还能设置接收订阅之前发送的n个事件。</p>
+
+<figure class="highlight"><pre><code class="language-swift" data-lang="swift"><span class="k">let</span> <span class="nv">disposeBag</span> <span class="o">=</span> <span class="kt">DisposeBag</span><span class="p">()</span>
+<span class="k">let</span> <span class="nv">subject</span> <span class="o">=</span> <span class="kt">ReplaySubject</span><span class="o">&lt;</span><span class="kt">String</span><span class="o">&gt;.</span><span class="nf">create</span><span class="p">(</span><span class="nv">bufferSize</span><span class="p">:</span> <span class="mi">2</span><span class="p">)</span>     <span class="c1">// 接收订阅前的2个事件</span>
+<span class="n">subject</span><span class="o">.</span><span class="nf">subscribe</span><span class="p">({</span>
+    <span class="nf">print</span><span class="p">(</span><span class="s">"Subscription:1, Event:"</span><span class="p">,</span><span class="nv">$0</span><span class="p">);</span>
+<span class="p">})</span><span class="o">.</span><span class="nf">disposed</span><span class="p">(</span><span class="nv">by</span><span class="p">:</span> <span class="n">disposeBag</span><span class="p">)</span>
+<span class="n">subject</span><span class="o">.</span><span class="nf">onNext</span><span class="p">(</span><span class="s">"🐶"</span><span class="p">)</span>
+<span class="n">subject</span><span class="o">.</span><span class="nf">onNext</span><span class="p">(</span><span class="s">"🐱"</span><span class="p">)</span>
+<span class="n">subject</span><span class="o">.</span><span class="nf">onNext</span><span class="p">(</span><span class="s">"🐭"</span><span class="p">)</span>
+<span class="n">subject</span><span class="o">.</span><span class="nf">subscribe</span><span class="p">({</span>
+    <span class="nf">print</span><span class="p">(</span><span class="s">"Subscription:2, Event:"</span><span class="p">,</span><span class="nv">$0</span><span class="p">);</span>
+<span class="p">})</span><span class="o">.</span><span class="nf">disposed</span><span class="p">(</span><span class="nv">by</span><span class="p">:</span> <span class="n">disposeBag</span><span class="p">)</span>
+<span class="n">subject</span><span class="o">.</span><span class="nf">onNext</span><span class="p">(</span><span class="s">"🅰️"</span><span class="p">)</span>
+<span class="n">subject</span><span class="o">.</span><span class="nf">onNext</span><span class="p">(</span><span class="s">"🅱️"</span><span class="p">)</span>
+<span class="cm">/*
+ Subscription:1, Event: next(🐶)
+ Subscription:1, Event: next(🐱)
+ Subscription:1, Event: next(🐭)
+ Subscription:2, Event: next(🐭)
+ Subscription:1, Event: next(🅰️)
+ Subscription:2, Event: next(🅰️)
+ Subscription:1, Event: next(🅱️)
+ Subscription:2, Event: next(🅱️)
+*/</span></code></pre></figure>
+
+<h4 id="3behaviorsubject">3.BehaviorSubject</h4>
+<p>BehaviorSubject作为订阅者的时候，不仅接收订阅之后发送的事件，还接收订阅之前最后发送的事件。效果等同于 <code>ReplaySubject<String>.create(bufferSize: 1)</String></code></p>
+
+<figure class="highlight"><pre><code class="language-swift" data-lang="swift"><span class="k">let</span> <span class="nv">disposeBag</span> <span class="o">=</span> <span class="kt">DisposeBag</span><span class="p">()</span>
+<span class="k">let</span> <span class="nv">subject</span> <span class="o">=</span> <span class="kt">BehaviorSubject</span><span class="p">(</span><span class="nv">value</span><span class="p">:</span> <span class="s">"🔴"</span><span class="p">)</span>
+<span class="n">subject</span><span class="o">.</span><span class="nf">subscribe</span><span class="p">({</span>
+    <span class="nf">print</span><span class="p">(</span><span class="s">"Subscription:1, Event:"</span><span class="p">,</span><span class="nv">$0</span><span class="p">);</span>
+<span class="p">})</span><span class="o">.</span><span class="nf">disposed</span><span class="p">(</span><span class="nv">by</span><span class="p">:</span> <span class="n">disposeBag</span><span class="p">)</span>
+<span class="n">subject</span><span class="o">.</span><span class="nf">onNext</span><span class="p">(</span><span class="s">"🐶"</span><span class="p">)</span>
+<span class="n">subject</span><span class="o">.</span><span class="nf">onNext</span><span class="p">(</span><span class="s">"🐱"</span><span class="p">)</span>
+<span class="n">subject</span><span class="o">.</span><span class="nf">subscribe</span><span class="p">({</span>
+    <span class="nf">print</span><span class="p">(</span><span class="s">"Subscription:2, Event:"</span><span class="p">,</span><span class="nv">$0</span><span class="p">);</span>
+<span class="p">})</span><span class="o">.</span><span class="nf">disposed</span><span class="p">(</span><span class="nv">by</span><span class="p">:</span> <span class="n">disposeBag</span><span class="p">)</span>
+<span class="n">subject</span><span class="o">.</span><span class="nf">onNext</span><span class="p">(</span><span class="s">"🅰️"</span><span class="p">)</span>
+<span class="n">subject</span><span class="o">.</span><span class="nf">onNext</span><span class="p">(</span><span class="s">"🅱️"</span><span class="p">)</span>
+<span class="n">subject</span><span class="o">.</span><span class="nf">subscribe</span><span class="p">({</span>
+    <span class="nf">print</span><span class="p">(</span><span class="s">"Subscription:3, Event:"</span><span class="p">,</span><span class="nv">$0</span><span class="p">);</span>
+<span class="p">})</span><span class="o">.</span><span class="nf">disposed</span><span class="p">(</span><span class="nv">by</span><span class="p">:</span> <span class="n">disposeBag</span><span class="p">)</span>
+<span class="n">subject</span><span class="o">.</span><span class="nf">onNext</span><span class="p">(</span><span class="s">"🍐"</span><span class="p">)</span>
+<span class="n">subject</span><span class="o">.</span><span class="nf">onNext</span><span class="p">(</span><span class="s">"🍊"</span><span class="p">)</span>
+<span class="cm">/*
+ Subscription:1, Event: next(🔴)
+ Subscription:1, Event: next(🐶)
+ Subscription:1, Event: next(🐱)
+ Subscription:2, Event: next(🐱)
+ Subscription:1, Event: next(🅰️)
+ Subscription:2, Event: next(🅰️)
+ Subscription:1, Event: next(🅱️)
+ Subscription:2, Event: next(🅱️)
+ Subscription:3, Event: next(🅱️)
+ Subscription:1, Event: next(🍐)
+ Subscription:2, Event: next(🍐)
+ Subscription:3, Event: next(🍐)
+ Subscription:1, Event: next(🍊)
+ Subscription:2, Event: next(🍊)
+ Subscription:3, Event: next(🍊)
+*/</span></code></pre></figure>
+
+<h4 id="4variable">4.Variable</h4>
+<p>Variable作为订阅者的时候，不仅接收订阅之后发送的事件，还接收订阅之前最后发送的事件。Variable与BehaviorSubject的区别就是Variable会自动发送completed事件。</p>
+
+<figure class="highlight"><pre><code class="language-swift" data-lang="swift"><span class="k">let</span> <span class="nv">disposeBag</span> <span class="o">=</span> <span class="kt">DisposeBag</span><span class="p">()</span>
+<span class="k">let</span> <span class="nv">variable</span> <span class="o">=</span> <span class="kt">Variable</span><span class="p">(</span><span class="s">"🔴"</span><span class="p">)</span>
+<span class="n">variable</span><span class="o">.</span><span class="nf">asObservable</span><span class="p">()</span><span class="o">.</span><span class="nf">subscribe</span><span class="p">({</span>
+    <span class="nf">print</span><span class="p">(</span><span class="s">"Subscription:1, Event:"</span><span class="p">,</span><span class="nv">$0</span><span class="p">);</span>
+<span class="p">})</span><span class="o">.</span><span class="nf">disposed</span><span class="p">(</span><span class="nv">by</span><span class="p">:</span> <span class="n">disposeBag</span><span class="p">)</span>
+<span class="n">variable</span><span class="o">.</span><span class="n">value</span> <span class="o">=</span> <span class="s">"🐶"</span>
+<span class="n">variable</span><span class="o">.</span><span class="n">value</span> <span class="o">=</span> <span class="s">"🐱"</span>
+<span class="n">variable</span><span class="o">.</span><span class="nf">asObservable</span><span class="p">()</span><span class="o">.</span><span class="nf">subscribe</span><span class="p">({</span>
+    <span class="nf">print</span><span class="p">(</span><span class="s">"Subscription:2, Event:"</span><span class="p">,</span><span class="nv">$0</span><span class="p">);</span>
+<span class="p">})</span><span class="o">.</span><span class="nf">disposed</span><span class="p">(</span><span class="nv">by</span><span class="p">:</span> <span class="n">disposeBag</span><span class="p">)</span>
+<span class="n">variable</span><span class="o">.</span><span class="n">value</span> <span class="o">=</span> <span class="s">"🅰️"</span>
+<span class="n">variable</span><span class="o">.</span><span class="n">value</span> <span class="o">=</span> <span class="s">"🅱️"</span>
+<span class="cm">/*
+ Subscription:1, Event: next(🔴)
+ Subscription:1, Event: next(🐶)
+ Subscription:1, Event: next(🐱)
+ Subscription:2, Event: next(🐱)
+ Subscription:1, Event: next(🅰️)
+ Subscription:2, Event: next(🅰️)
+ Subscription:1, Event: next(🅱️)
+ Subscription:2, Event: next(🅱️)
+ Subscription:1, Event: completed
+ Subscription:2, Event: completed
+*/</span></code></pre></figure>
+
+<h4 id="5driver">5.Driver</h4>
+<p>Driver有以下特点：1 Driver序列不允许发出error，2 Driver序列的监听只会在主线程中。所以Driver是转为UI绑定量身打造的东西。以下情况你可以使用Driver替换BindTo:  <br />
+不能发出error  <br />
+在主线程中监听  <br />
+共享事件流</p>
+:ET

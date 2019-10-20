@@ -1,0 +1,119 @@
+I"W<p>最近用swift重写一个项目，项目涉及了蓝牙的相关开发。于是做一下笔记，以便日后再次用到，同时也可以和大家共享。</p>
+
+<p><strong>1.导入蓝牙库</strong>  <br />
+如果你在iOS开发中相与蓝牙设备进行通信，必须倒入CoreBluetooth      <br />
+{% highlight Objective-C %}
+import CoreBluetooth
+{% endhighlight %}
+<strong>2.设置代理</strong>  <br />
+接下去，你可以从CBCentralManagerDelegate和CBPeripheralDelegate的回调方法进行蓝牙通信的实现
+{% highlight Objective-C %}
+class ViewController: UIViewController, CBCentralManagerDelegate, CBPeripheralDelegate {
+  // More code
+}
+{% endhighlight %}
+<strong>3.声明manager和peripheral</strong>  <br />
+CBCentralManager是用于发现、连接和管理蓝牙设备的。一旦你连上一个蓝牙设备，发现蓝牙设备的services和characteristics，peripheral将帮助你快速获取characteristics、订阅characteristics等。
+{% highlight Objective-C %}
+var manager:CBCentralManager!<br />
+var peripheral:CBPeripheral!
+{% endhighlight %}
+<strong>4.获取蓝牙设备的UUID和Service</strong>  <br />
+蓝牙设备的所有services和characteristics都有一个特定的UUID。很多时候你都需要通过这些UUID来获取你所需要的services和characteristics。整个蓝牙通信的过程中会反复用到这些UUID，所以把这些会反复用到的UUID声明为全局的常量以便于多个代理方法里面共用，提高代码的整洁性。另外，还有一些特定的service/characteristic是<a href="https://www.bluetooth.com/specifications/gatt/services">通用</a>的。  <br />
+{% highlight Objective-C %}
+let BEAN_NAME = “Robu”<br />
+let BEAN_SCRATCH_UUID = CBUUID(string: “a495ff21-c5b1-4b44-b512-1370f02d74de”)
+let BEAN_SERVICE_UUID = CBUUID(string: “a495ff20-c5b1-4b44-b512-1370f02d74de”)
+{% endhighlight %}
+<strong>5.实例化CBCentralManager</strong>  <br />
+使用一行代码创建一个CBCentralManager实例，所需要的参数有两个，manager的代理和和蓝牙通信执行的线程（一般都传nil，表示在主线程中执行）。
+{% highlight Objective-C %}
+override func viewDidLoad() {<br />
+  super.viewDidLoad()      <br />
+  manager = CBCentralManager(delegate: self, queue: nil)
+}
+{% endhighlight %}
+<strong>6.扫描外设</strong>  <br />
+一旦完成CBCentralManager的实例化，会回调代理方法centralManagerDidUpdateState(<em>:)，更新当前的蓝牙状态，如果蓝牙已开启，则可以开始扫描外设。  <br />
+{% highlight Objective-C %}
+func centralManagerDidUpdateState(central: CBCentralManager) {<br />
+  if central.state == CBCentralManagerState.PoweredOn {
+    central.scanForPeripheralsWithServices(nil, options: nil)
+  } else {
+    print(“Bluetooth not available.”)
+  }
+}
+{% endhighlight %}
+<strong>7.连接外设</strong>  <br />
+每次扫描到外设，都会回调代理方法
+centralManager(</em>:didDiscoverPeripheral:advertisementData:RSSI:)，你可以在代理方法中获取外设的名称，根据名称选择你要连接的外设。
+{% highlight Objective-C %}
+func centralManager(central: CBCentralManager, didDiscoverPeripheral peripheral: CBPeripheral, advertisementData: [String : AnyObject], RSSI: NSNumber) {
+  let device = (advertisementData as NSDictionary).objectForKey(CBAdvertisementDataLocalNameKey) as? NSString
+  if device?.containsString(BEAN_NAME) == true {
+    self.manager.stopScan()
+    self.peripheral = peripheral
+    self.peripheral.delegate = self
+    manager.connectPeripheral(peripheral, options: nil)
+  }
+}
+{% endhighlight %}
+<strong>8.获取Services</strong>  <br />
+一旦你成功连接外设，你就可以通过代理方法centralManager(<em>:didConnectPeripheral:)获取外设的所有Service。
+{% highlight Objective-C %}
+func centralManager(central: CBCentralManager, didConnectPeripheral peripheral: CBPeripheral) {
+  peripheral.discoverServices(nil) // nil表示获取外设的所有服务，也可以使用UUID来创建Service，获取特定的Service
+}
+{% endhighlight %}
+<strong>9.获取Characteristics</strong>  <br />
+当发现service时，会回调代理方法
+peripheral(</em>:didDiscoverServices:)，你可以在代理方法中获取你所需要的characteristics
+{% highlight Objective-C %}
+func peripheral(peripheral: CBPeripheral, didDiscoverServices error: NSError?) {
+  for service in peripheral.services! {
+    let thisService = service as CBService
+    if service.UUID == BEAN_SERVICE_UUID {
+      peripheral.discoverCharacteristics(nil, forService: thisService) // nil表示获取所有的Characteristic，也可以通过UUID获取特定的Characteristic
+    }
+  }
+}
+{% endhighlight %}
+<strong>10.设置通知监听</strong>  <br />
+当发现charecteristic时会回调代理方法
+peripheral(<em>:didDiscoverCharacteristicsForService:error:)。此时，读取外设数据的方式有两种，一种是通过characteristic主动读取数据，另外一种时监听characteristic的数据变化。
+{% highlight Objective-C %}
+func peripheral(peripheral: CBPeripheral, didDiscoverCharacteristicsForService service: CBService, error: NSError?) {
+  for characteristic in service.characteristics! {
+    let thisCharacteristic = characteristic as CBCharacteristic
+    if thisCharacteristic.UUID == BEAN_SCRATCH_UUID {
+      self.peripheral.setNotifyValue(true, forCharacteristic: thisCharacteristic
+      )
+    }
+    else {
+	self.peripheral.readValueForCharacteristic(thisCharacteristic)
+    }
+  }
+}
+{% endhighlight %}
+<strong>11.数据通信</strong>  <br />
+当你监听了某个characteristic，当这个characteristic对应的数据发生变化会回调代理方法peripheral(</em>:didUpdateValueForCharacteristic:error:)。你可以在这个代理方法中对数据进行处理。
+{% highlight Objective-C %}
+func peripheral(peripheral: CBPeripheral, didUpdateValueForCharacteristic characteristic: CBCharacteristic, error: NSError?) {
+  var count:UInt32 = 0;
+  if characteristic.UUID == BEAN_SCRATCH_UUID {
+    characteristic.value!.getBytes(&amp;count, length: sizeof(UInt32))
+    labelCount.text = NSString(format: “%llu”, count) as String
+  }
+}
+{% endhighlight %}
+当你想传递数据给外设时，可以使用CBPeripheral的方法writeValue(<em>:forCharacteristic:type:)或writeValue(</em>:forDescriptor:)来给外设写入数据。当写入成功时，会回调代理方法peripheral(<em>:didWriteValueForCharacteristic:error:)或
+peripheral(</em>:didWriteValueForDescriptor:error:)  <br />
+<strong>12.断开连接</strong>  <br />
+当你想断开蓝牙连接时，你可以执行CBCentralManager的方法cancelPeripheralConnection(<em>:)，而当蓝牙连接断开时，会回调代理方法centralManager(</em>:didDisconnectPeripheral:error:)。
+{% highlight Objective-C %}
+func centralManager(central: CBCentralManager, didDisconnectPeripheral peripheral: CBPeripheral, error: NSError?) {
+  central.scanForPeripheralsWithServices(nil, options: nil)
+}
+{% endhighlight %}</p>
+
+:ET

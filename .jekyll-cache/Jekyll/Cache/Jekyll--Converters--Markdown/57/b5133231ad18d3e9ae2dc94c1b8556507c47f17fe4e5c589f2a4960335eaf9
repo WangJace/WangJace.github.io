@@ -1,0 +1,294 @@
+I"�&<p>RxSwift中可订阅序列会给订阅者发送的事件类型有Next、Error、Completed，Next为正常的事件，当出现错误时发送Error，当完成时发送Completed。</p>
+<h3 id="-创建可订阅事件流的几种方式">• 创建可订阅事件流的几种方式</h3>
+<h4 id="1nerver">1.nerver</h4>
+<p>不发松任何事件的可订阅事件流，下面这段代码不会打印任何东西，因为never不会发送任何时间给订阅者，所以订阅者的代码块不会被执行，即不会打印 <em>This will never be printed</em> 。
+{% highlight Swift %}
+let neverSequence = Observable<String>.never()
+let neverSequenceSubscription = neverSequence
+                                    .subscribe { _ in
+                                        print("This will never be printed")
+                                    }
+neverSequenceSubscription.disposed(by: DisposeBag())
+{% endhighlight %}</String></p>
+<h4 id="2empty">2.empty</h4>
+<p>只发送 <em>completed</em> 事件的可订阅事件流。下面这段代码只会打印 <em>completed</em> 。
+{% highlight Swift %}
+Observable<Int>.empty()
+    .subscribe { event in
+        print(event)
+        /* 
+         completed
+         */
+    }
+    .disposed(by: DisposeBag())
+{% endhighlight %}</Int></p>
+<h4 id="3just">3.just</h4>
+<p>只发送一个事件的可订阅事件流。
+{% highlight Swift %}
+Observable.just(“🔴”)
+    .subscribe { event in
+    print(event)
+    /* 
+     next(🔴)
+     completed
+     */
+    }
+    .disposed(by: DisposeBag())
+{% endhighlight %}</p>
+<h4 id="4of">4.of</h4>
+<p>发送一定数量事件的可订阅事件流.
+{% highlight Swift %}
+Observable.of(“🐶”, “🐱”, “🐭”, “🐹”)
+    .subscribe({ event in
+        print(event)
+        /*
+         next(🐶)
+         next(🐱)
+         next(🐭)
+         next(🐹)
+         completed
+         */
+    })
+    .disposed(by: DisposeBag())
+{% endhighlight %}</p>
+<h4 id="5from">5.from</h4>
+<p>获取一个队列（Array、Dictionary、Set）中的元素并转为一个个的事件发送的可订阅事件流。
+{% highlight Swift %}
+Observable.from([“🐶”, “🐱”, “🐭”, “🐹”])
+    .subscribe({
+        print($0)     // 语法糖: $0代表的是代码块的第一个参数，若有多个参数，则使用$0、$1、$2，依此类推。
+        /*
+         next(🐶)
+         next(🐱)
+         next(🐭)
+         next(🐹)
+         completed
+        <em>/
+    })
+    .disposed(by: DisposeBag())
+{% endhighlight %} <br />
+若队列元素仍为队列，from不会进一步解析。from只进行一层解析。
+{% highlight Swift %}
+Observable.from([[“🐶”, “🐱”, “🐭”, “🐹”], [“🍎”, “🍐”, “🍊”, “🍋”]])
+    .subscribe({
+        print($0)
+        /</em>
+         next([“🐶”, “🐱”, “🐭”, “🐹”])
+         next([“🍎”, “🍐”, “🍊”, “🍋”])
+         completed
+         <em>/
+    })
+    .disposed(by: DisposeBag())
+{% endhighlight %}
+from和of的区别：of是将传入的每个元素转为事件发送，from是将传入的队列元素取出，一一转为事件发送。
+{% highlight Swift %}
+// of
+Observable.of([“🐶”, “🐱”, “🐭”, “🐹”], [“🍎”, “🍐”, “🍊”, “🍋”])
+    .subscribe({
+        print($0)
+        /</em>
+         next([“🐶”, “🐱”, “🐭”, “🐹”])
+         next([“🍎”, “🍐”, “🍊”, “🍋”])
+         completed
+         */
+    })
+    .disposed(by: DisposeBag())
+{% endhighlight %}</p>
+<h4 id="6create">6.create</h4>
+<p>创建一个自定义的可订阅事件流。
+{% highlight Swift %}
+let myJust = { (element: String) -&gt; Observable<String> in
+    return Observable.create { observer in
+                observer.on(.next(element))
+                observer.on(.completed)
+                return Disposables.create()
+            }
+    }
+myJust("🔴")
+    .subscribe {
+        print($0)
+        /*
+         next(🔴)
+         completed
+        */
+    }
+    .disposed(by: DisposeBag())
+{% endhighlight %}</String></p>
+<h4 id="7range">7.range</h4>
+<p>创建发送一连串有序数字事件的可订阅事件流。
+{% highlight Swift %}
+Observable.range(start: 1, count: 5)
+    .subscribe {
+        print($0)
+        /*
+         next(1)
+         next(2)
+         next(3)
+         next(4)
+         next(5)
+         completed
+        */
+    }
+    .disposed(by: DisposeBag())
+{% endhighlight %}</p>
+<h4 id="8repeatelement">8.repeatElement</h4>
+<p>重复发送n次一个特定事件的可订阅事件流。
+{% highlight Swift %}
+Observable.repeatElement(“🔴”)
+    .take(3)     // 定义重复发送的次数
+    .subscribe({
+        print($0)
+        /*
+         next(🔴)
+         next(🔴)
+         next(🔴)
+         completed
+        */
+    })
+    .disposed(by: DisposeBag())
+{% endhighlight %}</p>
+<h4 id="9generate">9.generate</h4>
+<p>循环改变初始值，判断初始值在判断条件的结果是否为true来控制事件的发送。
+{% highlight Swift %}
+Observable.generate(
+    initialState: 0,
+    condition: { $0 &lt; 3 },
+    iterate: { $0 + 1 }
+    )
+    .subscribe({
+        print($0)
+        /*
+         next(0)
+         next(1)
+         next(2)
+         completed
+        */
+    })
+    .disposed(by: DisposeBag())
+{% endhighlight %}</p>
+<h3 id="-subject">• Subject</h3>
+<p>Subject既能作为可订阅的事件流，也可以作为订阅者的。</p>
+<h4 id="1publishsubject">1.PublishSubject</h4>
+<p>PublishSubject作为订阅者的时候只能接收订阅之后发送的事件。
+{% highlight Swift %}
+let disposeBag = DisposeBag()
+let subject = PublishSubject<String>()
+subject.subscribe({
+    print("Subscription:1, Event:",$0);
+}).disposed(by: disposeBag)
+subject.onNext("🐶")
+subject.onNext("🐱")
+subject.subscribe({
+    print("Subscription:2, Event:",$0);
+}).disposed(by: disposeBag)
+subject.onNext("🅰️")
+subject.onNext("🅱️")
+/*
+ Subscription:1, Event: next(🐶)
+ Subscription:1, Event: next(🐱)
+ Subscription:1, Event: next(🅰️)
+ Subscription:2, Event: next(🅰️)
+ Subscription:1, Event: next(🅱️)
+ Subscription:2, Event: next(🅱️)
+*/
+{% endhighlight %}</String></p>
+<h4 id="2replaysubject">2.ReplaySubject</h4>
+<p>ReplaySubject作为订阅者的时候，不仅接收订阅之后发送的事件，还能设置接收订阅之前发送的n个事件。
+{% highlight Swift %}
+let disposeBag = DisposeBag()
+let subject = ReplaySubject<String>.create(bufferSize: 2)     // 接收订阅前的2个事件
+subject.subscribe({
+    print("Subscription:1, Event:",$0);
+}).disposed(by: disposeBag)
+subject.onNext("🐶")
+subject.onNext("🐱")
+subject.onNext("🐭")
+subject.subscribe({
+    print("Subscription:2, Event:",$0);
+}).disposed(by: disposeBag)
+subject.onNext("🅰️")
+subject.onNext("🅱️")
+/*
+ Subscription:1, Event: next(🐶)
+ Subscription:1, Event: next(🐱)
+ Subscription:1, Event: next(🐭)
+ Subscription:2, Event: next(🐭)
+ Subscription:1, Event: next(🅰️)
+ Subscription:2, Event: next(🅰️)
+ Subscription:1, Event: next(🅱️)
+ Subscription:2, Event: next(🅱️)
+*/
+{% endhighlight %}</String></p>
+<h4 id="3behaviorsubject">3.BehaviorSubject</h4>
+<p>BehaviorSubject作为订阅者的时候，不仅接收订阅之后发送的事件，还接收订阅之前最后发送的事件。效果等同于 <code>ReplaySubject<String>.create(bufferSize: 1) 
+{% highlight Swift %}
+let disposeBag = DisposeBag()
+let subject = BehaviorSubject(value: "🔴")
+subject.subscribe({
+    print("Subscription:1, Event:",$0);
+}).disposed(by: disposeBag)
+subject.onNext("🐶")
+subject.onNext("🐱")
+subject.subscribe({
+    print("Subscription:2, Event:",$0);
+}).disposed(by: disposeBag)
+subject.onNext("🅰️")
+subject.onNext("🅱️")
+subject.subscribe({
+    print("Subscription:3, Event:",$0);
+}).disposed(by: disposeBag)
+subject.onNext("🍐")
+subject.onNext("🍊")
+/*
+ Subscription:1, Event: next(🔴)
+ Subscription:1, Event: next(🐶)
+ Subscription:1, Event: next(🐱)
+ Subscription:2, Event: next(🐱)
+ Subscription:1, Event: next(🅰️)
+ Subscription:2, Event: next(🅰️)
+ Subscription:1, Event: next(🅱️)
+ Subscription:2, Event: next(🅱️)
+ Subscription:3, Event: next(🅱️)
+ Subscription:1, Event: next(🍐)
+ Subscription:2, Event: next(🍐)
+ Subscription:3, Event: next(🍐)
+ Subscription:1, Event: next(🍊)
+ Subscription:2, Event: next(🍊)
+ Subscription:3, Event: next(🍊)
+*/
+{% endhighlight %}</String></code></p>
+<h4 id="4variable">4.Variable</h4>
+<p>Variable作为订阅者的时候，不仅接收订阅之后发送的事件，还接收订阅之前最后发送的事件。Variable与BehaviorSubject的区别就是Variable会自动发送completed事件。
+{% highlight Swift %}
+let disposeBag = DisposeBag()
+let variable = Variable(“🔴”)
+variable.asObservable().subscribe({
+    print(“Subscription:1, Event:”,$0);
+}).disposed(by: disposeBag)
+variable.value = “🐶”
+variable.value = “🐱”
+variable.asObservable().subscribe({
+    print(“Subscription:2, Event:”,$0);
+}).disposed(by: disposeBag)
+variable.value = “🅰️”
+variable.value = “🅱️”
+/*
+ Subscription:1, Event: next(🔴)
+ Subscription:1, Event: next(🐶)
+ Subscription:1, Event: next(🐱)
+ Subscription:2, Event: next(🐱)
+ Subscription:1, Event: next(🅰️)
+ Subscription:2, Event: next(🅰️)
+ Subscription:1, Event: next(🅱️)
+ Subscription:2, Event: next(🅱️)
+ Subscription:1, Event: completed
+ Subscription:2, Event: completed
+*/
+{% endhighlight %}</p>
+<h4 id="5driver">5.Driver</h4>
+<p>Driver有以下特点：1 Driver序列不允许发出error，2 Driver序列的监听只会在主线程中。所以Driver是转为UI绑定量身打造的东西。以下情况你可以使用Driver替换BindTo:  <br />
+不能发出error  <br />
+在主线程中监听  <br />
+共享事件流</p>
+
+:ET

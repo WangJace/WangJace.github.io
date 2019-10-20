@@ -1,0 +1,279 @@
+I"�/<p>前段时间在开发中遇到一个问题，就是控制一张图片无限的旋转，最后通过改变图片的css样式来实现旋转动效。直接上代码(<a href="https://github.com/WangJace/CSSRotateAnimation">demo地址</a>)</p>
+
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">"root"</span><span class="nt">&gt;</span>
+	<span class="nt">&lt;img</span> <span class="na">src=</span><span class="s">"./animation.png"</span> <span class="nt">/&gt;</span>
+<span class="nt">&lt;/div&gt;</span>
+
+<span class="nt">&lt;style&gt;</span>
+	<span class="nc">.root</span> <span class="p">{</span>
+		<span class="nl">width</span><span class="p">:</span> <span class="m">100vw</span><span class="p">;</span>
+		<span class="nl">height</span><span class="p">:</span> <span class="m">100vh</span><span class="p">;</span>
+		<span class="nl">display</span><span class="p">:</span> <span class="n">flex</span><span class="p">;</span>
+		<span class="nl">align-items</span><span class="p">:</span> <span class="n">flex-start</span><span class="p">;</span>
+		<span class="nl">justify-content</span><span class="p">:</span> <span class="nb">center</span><span class="p">;</span>
+	<span class="p">}</span>
+	<span class="nc">.root</span> <span class="nt">img</span> <span class="p">{</span>
+		<span class="nl">-webkit-animation</span><span class="p">:</span> <span class="n">rotateImg</span> <span class="m">10s</span> <span class="n">linear</span> <span class="n">infinite</span><span class="p">;</span>
+	<span class="p">}</span>
+	<span class="k">@-webkit-keyframes</span> <span class="n">rotateImg</span> <span class="p">{</span>
+		<span class="nt">0</span><span class="o">%</span> <span class="p">{</span>
+			<span class="nl">-webkit-transform</span><span class="p">:</span> <span class="n">rotate</span><span class="p">(</span><span class="m">0deg</span><span class="p">);</span>
+		<span class="p">}</span>
+		<span class="nt">25</span><span class="o">%</span> <span class="p">{</span>
+			<span class="nl">-webkit-transform</span><span class="p">:</span> <span class="n">rotate</span><span class="p">(</span><span class="m">90deg</span><span class="p">);</span>
+		<span class="p">}</span>
+		<span class="nt">50</span><span class="o">%</span> <span class="p">{</span>
+			<span class="nl">-webkit-transform</span><span class="p">:</span> <span class="n">rotate</span><span class="p">(</span><span class="m">180deg</span><span class="p">);</span>
+		<span class="p">}</span>
+		<span class="nt">75</span><span class="o">%</span> <span class="p">{</span>
+			<span class="nl">-webkit-transform</span><span class="p">:</span> <span class="n">rotate</span><span class="p">(</span><span class="m">270deg</span><span class="p">);</span>
+		<span class="p">}</span>
+		<span class="nt">100</span><span class="o">%</span> <span class="p">{</span>
+			<span class="nl">-webkit-transform</span><span class="p">:</span> <span class="n">rotate</span><span class="p">(</span><span class="m">360deg</span><span class="p">);</span>
+		<span class="p">}</span>
+	<span class="p">}</span>
+<span class="nt">&lt;/style&gt;</span>
+</code></pre></div></div>
+<p><img src="/assets/article_images/2019-08-21-screenshot.gif" alt="效果图" /><br />
+其中的关键是 <em>css</em> 中的 <em>-webkit-animation</em>，这里使用了 <a href="https://www.w3cschool.cn/cssref/pr-animation.html"><em>CSS3 animation</em></a> 属性来定义动画
+其中：<br />
+rotateImg: 需要绑定到选择器的 keyframe 名称<br />
+10s: 完成动画所花费的时间，以秒或毫秒计<br />
+linear: 画的速度曲线(linear是动画从头到尾的速度是相同的)<br />
+infinite: 动画应该播放的次数(infinite无限次播放)<br />
+<em>animation</em> 属性是六个动画属性的速记属性：</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>属性</th>
+      <th style="text-align: left">描述</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>animation-name</td>
+      <td style="text-align: left">规定需要绑定到选择器的 keyframe 名称</td>
+    </tr>
+    <tr>
+      <td>animation-duration</td>
+      <td style="text-align: left">规定完成动画所花费的时间，以秒或毫秒计</td>
+    </tr>
+    <tr>
+      <td>animation-timing-function</td>
+      <td style="text-align: left">规定动画的速度曲线</td>
+    </tr>
+    <tr>
+      <td>animation-delay</td>
+      <td style="text-align: left">规定在动画开始之前的延迟</td>
+    </tr>
+    <tr>
+      <td>animation-iteration-count</td>
+      <td style="text-align: left">规定动画应该播放的次数</td>
+    </tr>
+    <tr>
+      <td>animation-direction</td>
+      <td style="text-align: left">规定是否应该轮流反向播放动画</td>
+    </tr>
+  </tbody>
+</table>
+
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code>/* 使用简写属性，将动画与 div 元素绑定*/
+div 
+{ 
+	animation:mymove 5s infinite; 
+	-webkit-animation:mymove 5s infinite; /* Safari 和 Chrome */ 
+}
+</code></pre></div></div>
+<p>而不是用简写的话，则类似如下</p>
+
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code>animation-name: mynove; 
+-webkit-animation-name: mynove; /* Safari 和 Chrome */
+
+animation-delay:5s;
+-webkit-animation-delay:5s; /* Safari 和 Chrome */
+
+animation-iteration-count: infinite;
+-webkit-animation-iteration-count: infinite; /* Safari 和 Chrome */
+</code></pre></div></div>
+<p>然后使用 <a href="https://www.w3cschool.cn/cssref/pr-keyframes.html"><em>CSS3 @keyframes</em></a> 加动画名来别写动画的实现
+<code>@keyframes animationname {keyframes-selector {css-styles;}}</code></p>
+
+<table>
+  <thead>
+    <tr>
+      <th>值</th>
+      <th style="text-align: left">描述</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>animationname</td>
+      <td style="text-align: left">必需。定义动画的名称</td>
+    </tr>
+    <tr>
+      <td>keyframes-selector</td>
+      <td style="text-align: left">必需。动画时长的百分比。<br />合法的值：<br />• 0-100%<br />• from（与 0% 相同）<br />• to（与 100% 相同</td>
+    </tr>
+    <tr>
+      <td>keyframes-selector</td>
+      <td style="text-align: left">必需。一个或多个合法的 CSS 样式属性</td>
+    </tr>
+  </tbody>
+</table>
+
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code>@keyframes mymove { ... }
+@-moz-keyframes mymove { ... } /* Firefox */
+@-webkit-keyframes mymove { ... } /* Safari 和 Chrome */
+@-o-keyframes mymove { ... } /* Opera */
+</code></pre></div></div>
+<p>用 <a href="https://www.w3cschool.cn/css3/css3-2dtransforms.html"><em>CSS3 2D</em></a> 转换的 <em>rotate()</em> 来实现图片的旋转，而 <em>CSS3 2D</em> 转换的变换方法有以下几种：</p>
+<ul>
+  <li>translate()</li>
+  <li>rotate()</li>
+  <li>scale()</li>
+  <li>skew()</li>
+  <li>matrix()</li>
+</ul>
+
+<h4 id="-translate-方法">• translate() 方法</h4>
+<p>translate()方法，根据左(X轴)和顶部(Y轴)位置给定的参数，从当前元素位置移动。</p>
+
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code>div 
+{ 
+	transform: translate(50px,100px); 
+	-ms-transform: translate(50px,100px); /* IE 9 */ 
+	-webkit-transform: translate(50px,100px); /* Safari and Chrome */ 
+}
+</code></pre></div></div>
+<p>translate值（50px，100px）是从左边元素移动50个像素，并从顶部移动100像素。</p>
+<h4 id="-rotate-方法">• rotate() 方法</h4>
+<p>rotate()方法，在一个给定度数顺时针旋转的元素。负值是允许的，这样是元素逆时针旋转。</p>
+
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code>div 
+{ 
+	transform: rotate(30deg); 
+	-ms-transform: rotate(30deg); /* IE 9 */ 
+	-webkit-transform: rotate(30deg); /* Safari and Chrome */ 
+}
+</code></pre></div></div>
+<p>rotate值（30deg）元素顺时针旋转30度。</p>
+<h4 id="-scale-方法">• scale() 方法</h4>
+<p>scale()方法，该元素增加或减少的大小，取决于宽度（X轴）和高度（Y轴）的参数：</p>
+
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code>div 
+{ 
+	transform: scale(2,4); 
+	-ms-transform: scale(2,4); /* IE 9 */ 
+	-webkit-transform: scale(2,4); /* Safari and Chrome */ 
+}
+</code></pre></div></div>
+<p>scale（2,4）转变宽度为原来的大小的2倍，和其原始大小4倍的高度。</p>
+<h4 id="-skew-方法">• skew() 方法</h4>
+<p>包含两个参数值，分别表示X轴和Y轴倾斜的角度，如果第二个参数为空，则默认为0，参数为负表示向相反方向倾斜。</p>
+<ul>
+  <li>skewX();表示只在X轴(水平方向)倾斜。</li>
+  <li>skewY();表示只在Y轴(垂直方向)倾斜。</li>
+</ul>
+
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code>div 
+{ 
+	transform: skew(30deg,20deg); 
+	-ms-transform: skew(30deg,20deg); /* IE 9 */ 
+	-webkit-transform: skew(30deg,20deg); /* Safari and Chrome */ 
+}
+</code></pre></div></div>
+<p>skew(30deg,20deg)是元素在X轴和Y轴上倾斜20度30度。</p>
+<h4 id="-matrix-方法">• matrix() 方法</h4>
+<p>matrix()方法和2D变换方法合并成一个。<br />
+matrix 方法有六个参数，包含旋转，缩放，移动（平移）和倾斜功能。</p>
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code>/* 利用matrix()方法旋转div元素30° */
+div 
+{ 
+	transform:matrix(0.866,0.5,-0.5,0.866,0,0); 
+	-ms-transform:matrix(0.866,0.5,-0.5,0.866,0,0); /* IE 9 */ 
+	-webkit-transform:matrix(0.866,0.5,-0.5,0.866,0,0); /* Safari and Chrome */ 
+}
+</code></pre></div></div>
+<h4 id="新转换属性">新转换属性</h4>
+<p>以下列出了所有的转换属性：</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Property</th>
+      <th style="text-align: left">描述</th>
+      <th>CSS</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><a href="https://www.w3cschool.cn/cssref/css3-pr-transform.html">transform</a></td>
+      <td style="text-align: left">适用于2D或3D转换的元素</td>
+      <td>3</td>
+    </tr>
+    <tr>
+      <td><a href="https://www.w3cschool.cn/cssref/css3-pr-transform-origin.html">transform-origin</a></td>
+      <td style="text-align: left">允许您更改转化元素位置</td>
+      <td>3</td>
+    </tr>
+  </tbody>
+</table>
+
+<h4 id="2d转换方法">2D转换方法</h4>
+
+<table>
+  <thead>
+    <tr>
+      <th>函数</th>
+      <th style="text-align: left">描述</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>matrix(n,n,n,n,n,n)</td>
+      <td style="text-align: left">定义 2D 转换，使用六个值的矩阵</td>
+    </tr>
+    <tr>
+      <td>translate(x,y)</td>
+      <td style="text-align: left">定义 2D 转换，沿着 X 和 Y 轴移动元素</td>
+    </tr>
+    <tr>
+      <td>translateX(n)</td>
+      <td style="text-align: left">定义 2D 转换，沿着 X 轴移动元素</td>
+    </tr>
+    <tr>
+      <td>translateY(n)</td>
+      <td style="text-align: left">定义 2D 转换，沿着 Y 轴移动元素</td>
+    </tr>
+    <tr>
+      <td>scale(x,y)</td>
+      <td style="text-align: left">定义 2D 缩放转换，改变元素的宽度和高度</td>
+    </tr>
+    <tr>
+      <td>scaleX(n)</td>
+      <td style="text-align: left">定义 2D 缩放转换，改变元素的宽度</td>
+    </tr>
+    <tr>
+      <td>scaleY(n)</td>
+      <td style="text-align: left">定义 2D 缩放转换，改变元素的高度</td>
+    </tr>
+    <tr>
+      <td>rotate(angle)</td>
+      <td style="text-align: left">定义 2D 旋转，在参数中规定角度</td>
+    </tr>
+    <tr>
+      <td>skew(x-angle,y-angle)</td>
+      <td style="text-align: left">定义 2D 倾斜转换，沿着 X 和 Y 轴</td>
+    </tr>
+    <tr>
+      <td>skewX(angle)</td>
+      <td style="text-align: left">定义 2D 倾斜转换，沿着 X 轴</td>
+    </tr>
+    <tr>
+      <td>skewY(angle)</td>
+      <td style="text-align: left">定义 2D 倾斜转换，沿着 Y 轴</td>
+    </tr>
+  </tbody>
+</table>
+:ET

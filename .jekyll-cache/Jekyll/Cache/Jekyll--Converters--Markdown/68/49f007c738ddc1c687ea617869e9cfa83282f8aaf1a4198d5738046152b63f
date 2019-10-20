@@ -1,0 +1,266 @@
+I"��<p><strong>1.Optional</strong>  <br />
+Optional是Swift的一个新特性。它允许函数返回一个可选值，即在函数返回值不确定是否为nil的时候。在Objective-C是直接返回nil，但在Swift不能直接返回nil，可以选择返回一个可选类型。</p>
+
+<figure class="highlight"><pre><code class="language-swift" data-lang="swift"><span class="k">let</span> <span class="nv">a</span> <span class="o">=</span> <span class="s">"512"</span>
+<span class="k">let</span> <span class="nv">b</span> <span class="o">=</span> <span class="s">"Hello"</span>
+<span class="k">let</span> <span class="nv">c</span> <span class="o">=</span> <span class="kt">Int</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
+<span class="k">let</span> <span class="nv">d</span> <span class="o">=</span> <span class="kt">Int</span><span class="p">(</span><span class="n">b</span><span class="p">)</span>
+<span class="nf">print</span><span class="p">(</span><span class="n">c</span><span class="p">)</span> <span class="c1">// Optional(512)</span>
+<span class="nf">print</span><span class="p">(</span><span class="n">d</span><span class="p">)</span> <span class="c1">// nil</span></code></pre></figure>
+
+<p><strong>2.流程控制</strong>  <br />
+在Swift中，使用<em>if…else…</em>、<em>for</em>、<em>while</em>、<em>repeat</em>时，<em>{ }</em> 是不可以省略的。而在Objective-C中，如果流程控制中只有一个语句，则<em>{ }</em>是可以省略的。  <br />
+<strong>3.类型推断</strong>  <br />
+在Swift中，定义一个变量或者常量，可以不申明数据类型，编译器会根据数值推断数据类型。而在Objective-C中，定义一个变量或者常量必须同时申明数据类型。</p>
+
+<figure class="highlight"><pre><code class="language-swift" data-lang="swift"><span class="k">var</span> <span class="nv">str</span> <span class="o">=</span> <span class="s">"Some string"</span>
+<span class="c1">// OR</span>
+<span class="k">var</span> <span class="nv">str2</span><span class="p">:</span><span class="kt">String</span>
+<span class="n">str2</span> <span class="o">=</span> <span class="s">"Other string"</span></code></pre></figure>
+
+<figure class="highlight"><pre><code class="language-objective-c" data-lang="objective-c">NSString str = @"There is no type inference in Objective-C :("</code></pre></figure>
+
+<p><strong>4.元组</strong>  <br />
+元组是Swift新增的又一个新特性，它可以存储一组数据，但不像数组，元组存储的数据可以是不同类型的。</p>
+
+<figure class="highlight"><pre><code class="language-swift" data-lang="swift"><span class="k">var</span> <span class="nv">t</span><span class="p">:(</span><span class="kt">String</span><span class="p">,</span> <span class="kt">Int</span><span class="p">)</span> <span class="o">=</span> <span class="p">(</span><span class="s">"John"</span><span class="p">,</span> <span class="mi">33</span><span class="p">)</span>
+<span class="nf">print</span><span class="p">(</span><span class="n">t</span><span class="o">.</span><span class="mi">0</span><span class="p">,</span> <span class="n">t</span><span class="o">.</span><span class="mi">1</span><span class="p">)</span>
+ 
+<span class="k">var</span> <span class="nv">j</span><span class="p">:(</span><span class="nv">name</span><span class="p">:</span><span class="kt">String</span><span class="p">,</span> <span class="kt">Int</span><span class="p">)</span> <span class="o">=</span> <span class="p">(</span><span class="s">"Morgan"</span><span class="p">,</span> <span class="mi">52</span><span class="p">)</span>
+<span class="nf">print</span><span class="p">(</span><span class="n">j</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">j</span><span class="o">.</span><span class="mi">1</span><span class="p">)</span></code></pre></figure>
+
+<p>当函数需要返回多个类型的数据时，就可以使用元组来实现。</p>
+
+<figure class="highlight"><pre><code class="language-swift" data-lang="swift"><span class="k">var</span> <span class="nv">arr</span> <span class="o">=</span> <span class="p">[</span><span class="mi">23</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">33</span><span class="p">,</span> <span class="mi">9</span><span class="p">]</span>
+<span class="kd">func</span> <span class="nf">findPosition</span><span class="p">(</span><span class="nv">el</span><span class="p">:</span><span class="kt">Int</span><span class="p">,</span> <span class="nv">arr</span><span class="p">:[</span><span class="kt">Int</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="p">(</span><span class="nv">found</span><span class="p">:</span><span class="kt">Bool</span><span class="p">,</span> <span class="nv">position</span><span class="p">:</span><span class="kt">Int</span><span class="p">)?</span> <span class="p">{</span>
+   <span class="k">if</span> <span class="n">arr</span><span class="o">.</span><span class="n">isEmpty</span> <span class="p">{</span>
+      <span class="k">return</span> <span class="kc">nil</span>
+   <span class="p">}</span>
+   <span class="k">for</span> <span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span> <span class="k">in</span> <span class="n">arr</span><span class="o">.</span><span class="nf">enumerate</span><span class="p">()</span> <span class="p">{</span>
+      <span class="k">if</span> <span class="n">value</span> <span class="o">==</span> <span class="n">el</span> <span class="p">{</span>
+         <span class="nf">return</span> <span class="p">(</span><span class="kc">true</span><span class="p">,</span> <span class="n">i</span><span class="p">)</span>
+      <span class="p">}</span>
+   <span class="p">}</span>
+   <span class="nf">return</span> <span class="p">(</span><span class="kc">false</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+<span class="p">}</span>
+ 
+<span class="k">if</span> <span class="k">let</span> <span class="p">(</span><span class="nv">isFound</span><span class="p">,</span> <span class="nv">elPosition</span><span class="p">)</span> <span class="o">=</span> <span class="nf">findPosition</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="nv">arr</span><span class="p">:</span> <span class="n">arr</span><span class="p">)</span> <span class="p">{</span>
+   <span class="nf">print</span><span class="p">(</span><span class="n">isFound</span><span class="p">,</span> <span class="n">elPosition</span><span class="p">)</span>
+   <span class="c1">// true 1</span>
+<span class="p">}</span></code></pre></figure>
+
+<p><strong>5.字符串操作</strong>  <br />
+在Objective-C中，<em>NString</em>和<em>NSMutableString</em>分别表示不可变字符串和可变字符串，但Swift就不再需要如此区分啦，不可变字符串直接使用<em>let</em>申明，可变字符串则使用<em>var</em>申明即可。在字符串拼接操作上，Swift要比Objective-C简便多了。</p>
+
+<figure class="highlight"><pre><code class="language-swift" data-lang="swift"><span class="c1">// Swift:</span>
+<span class="k">var</span> <span class="nv">str</span> <span class="o">=</span> <span class="s">"My string"</span>
+<span class="n">str</span> <span class="o">+=</span> <span class="s">" and another string”</span></code></pre></figure>
+
+<figure class="highlight"><pre><code class="language-objective-c" data-lang="objective-c">// Objective-C:
+NSString *myString = @"My string";
+myString = [NSString stringWithFormat:@"%@ and another string", myString];</code></pre></figure>
+
+<p>在字符串中拼接一些其他类型的数据：</p>
+
+<figure class="highlight"><pre><code class="language-objective-c" data-lang="objective-c">// Objective-C:
+NSString *str = [NSString stringWithFormat:@"String: %@ | Signed 32-bit integer: %d | 64-bit floating-point number: %f", @"My String", myInt, myFloat];</code></pre></figure>
+
+<figure class="highlight"><pre><code class="language-swift" data-lang="swift"><span class="c1">// Swift:</span>
+<span class="k">var</span> <span class="nv">str</span> <span class="o">=</span> <span class="s">"String: </span><span class="se">\(</span><span class="n">myString</span><span class="se">)</span><span class="s"> | Signed 32-bit integer: </span><span class="se">\(</span><span class="n">myInt</span><span class="se">)</span><span class="s"> | 64-bit floating-point number: </span><span class="se">\(</span><span class="n">myFloat</span><span class="se">)</span><span class="s">"</span></code></pre></figure>
+
+<p><strong>6.Guard &amp; Defer</strong>  <br />
+先看一段Objective-C代码：</p>
+
+<figure class="highlight"><pre><code class="language-objective-c" data-lang="objective-c">enum TriangleAreaCalcError: ErrorType {
+   case AngleNotSpecified
+   case InvalidAngle
+   case SideANotSpecified
+   case SideBNotSpecified
+}
+func calcTriangleArea(a: Double ? , b : Double ? , alpha : Double ? ) throws - &gt; Double {
+   if let a = a {
+      if let b = b {
+         if let alpha = alpha {
+            if alpha &lt; 180 &amp;&amp; alpha &gt;= 0 {
+               if alpha == 180 {
+                  return 0
+               }
+               return 0.5 * a * b * sin(alpha * M_PI / 180.0)
+            } else {
+               throw TriangleAreaCalcError.InvalidAngle
+            }
+         } else {
+            throw TriangleAreaCalcError.AngleNotSpecified
+         }
+      } else {
+         throw TriangleAreaCalcError.SideBNotSpecified
+      }
+   } else {
+      throw TriangleAreaCalcError.SideANotSpecified
+   }
+}</code></pre></figure>
+
+<p>这段代码出现了多层<em>if…else…</em>嵌套，这种代码比较不好维护。但在Swift中，可以使用<em>guard</em>来解决这个问题。</p>
+
+<figure class="highlight"><pre><code class="language-swift" data-lang="swift"><span class="kd">func</span> <span class="nf">calcTriangleArea</span><span class="p">(</span><span class="nv">a</span><span class="p">:</span> <span class="kt">Double</span> <span class="p">?</span> <span class="p">,</span> <span class="nv">b</span> <span class="p">:</span> <span class="kt">Double</span> <span class="p">?</span> <span class="p">,</span> <span class="nv">alpha</span> <span class="p">:</span> <span class="kt">Double</span> <span class="p">?</span> <span class="p">)</span> <span class="k">throws</span> <span class="o">-</span> <span class="o">&gt;</span> <span class="kt">Double</span> <span class="p">{</span>
+   <span class="k">guard</span> <span class="k">let</span> <span class="nv">a</span> <span class="o">=</span> <span class="n">a</span> <span class="k">else</span> <span class="p">{</span>
+      <span class="k">throw</span> <span class="kt">TriangleAreaCalcError</span><span class="o">.</span><span class="kt">SideANotSpecified</span>
+   <span class="p">}</span>
+   <span class="k">guard</span> <span class="k">let</span> <span class="nv">b</span> <span class="o">=</span> <span class="n">b</span> <span class="k">else</span> <span class="p">{</span>
+      <span class="k">throw</span> <span class="kt">TriangleAreaCalcError</span><span class="o">.</span><span class="kt">SideBNotSpecified</span>
+   <span class="p">}</span>
+   <span class="k">guard</span> <span class="k">let</span> <span class="nv">alpha</span> <span class="o">=</span> <span class="n">alpha</span> <span class="k">else</span> <span class="p">{</span>
+      <span class="k">throw</span> <span class="kt">TriangleAreaCalcError</span><span class="o">.</span><span class="kt">AngleNotSpecified</span>
+   <span class="p">}</span>
+   <span class="k">if</span> <span class="n">alpha</span> <span class="o">==</span> <span class="mi">180</span> <span class="p">{</span>
+      <span class="k">return</span> <span class="kt">Double</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+   <span class="p">}</span>
+   <span class="k">guard</span> <span class="n">alpha</span> <span class="o">&lt;</span> <span class="mi">180</span> <span class="o">&amp;&amp;</span> <span class="n">alpha</span> <span class="o">&gt;=</span> <span class="mi">0</span> <span class="k">else</span> <span class="p">{</span>
+      <span class="k">throw</span> <span class="kt">TriangleAreaCalcError</span><span class="o">.</span><span class="kt">InvalidAngle</span>
+   <span class="p">}</span>
+   <span class="k">return</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">a</span> <span class="o">*</span> <span class="n">b</span> <span class="o">*</span> <span class="nf">sin</span><span class="p">(</span><span class="n">alpha</span> <span class="o">*</span> <span class="kt">M_PI</span> <span class="o">/</span> <span class="mf">180.0</span><span class="p">)</span>
+<span class="p">}</span></code></pre></figure>
+
+<p>Swift中还提供了<em>defer</em>，可以在函数代码执行结束，离开代码块直接执行<em>defer</em>的代码。</p>
+
+<figure class="highlight"><pre><code class="language-swift" data-lang="swift"><span class="kd">func</span> <span class="nf">someImageFunc</span><span class="p">()</span> <span class="o">-</span> <span class="o">&gt;</span> <span class="kt">UIImage</span> <span class="p">?</span> <span class="p">{</span>
+   <span class="k">let</span> <span class="nv">dataSize</span><span class="p">:</span> <span class="kt">Int</span> <span class="o">=</span> <span class="o">...</span>
+   <span class="k">let</span> <span class="nv">destData</span> <span class="o">=</span> <span class="kt">UnsafeMutablePointer</span> <span class="o">&lt;</span> <span class="kt">UInt8</span> <span class="o">&gt;</span> <span class="o">.</span><span class="nf">alloc</span><span class="p">(</span><span class="n">dataSize</span><span class="p">)</span>
+   <span class="c1">// ...</span>
+   <span class="k">guard</span> <span class="n">error</span> <span class="k">else</span> <span class="p">{</span>
+      <span class="n">destData</span><span class="o">.</span><span class="nf">dealloc</span><span class="p">(</span><span class="n">dataSize</span><span class="p">)</span> <span class="c1">// #1</span>
+      <span class="k">return</span> <span class="kc">nil</span>
+   <span class="p">}</span>
+   <span class="k">guard</span> <span class="n">error2</span> <span class="k">else</span> <span class="p">{</span>
+      <span class="n">destData</span><span class="o">.</span><span class="nf">dealloc</span><span class="p">(</span><span class="n">dataSize</span><span class="p">)</span> <span class="c1">// #2</span>
+      <span class="k">return</span> <span class="kc">nil</span>
+   <span class="p">}</span>
+   <span class="k">guard</span> <span class="n">error3</span> <span class="k">else</span> <span class="p">{</span>
+      <span class="n">destData</span><span class="o">.</span><span class="nf">dealloc</span><span class="p">(</span><span class="n">dataSize</span><span class="p">)</span> <span class="c1">// #3</span>
+      <span class="k">return</span> <span class="kc">nil</span>
+   <span class="p">}</span>
+   <span class="n">destData</span><span class="o">.</span><span class="nf">dealloc</span><span class="p">(</span><span class="n">dataSize</span><span class="p">)</span> <span class="c1">// #4</span>
+   <span class="c1">// ...</span>
+<span class="p">}</span></code></pre></figure>
+
+<p>上面的代码，<em>destData.dealloc(dataSize)</em>这句代码被重复写了4次。使用<em>defer</em>，可以对代码进行优化。</p>
+
+<figure class="highlight"><pre><code class="language-swift" data-lang="swift"><span class="kd">func</span> <span class="nf">someImageFunc</span><span class="p">()</span> <span class="o">-</span> <span class="o">&gt;</span> <span class="kt">UIImage</span> <span class="p">?</span> <span class="p">{</span>
+   <span class="k">let</span> <span class="nv">dataSize</span><span class="p">:</span> <span class="kt">Int</span> <span class="o">=</span> <span class="o">...</span>
+   <span class="k">let</span> <span class="nv">destData</span> <span class="o">=</span> <span class="kt">UnsafeMutablePointer</span> <span class="o">&lt;</span> <span class="kt">UInt8</span> <span class="o">&gt;</span> <span class="o">.</span><span class="nf">alloc</span><span class="p">(</span><span class="n">dataSize</span><span class="p">)</span>
+   <span class="c1">// ...</span>
+   <span class="k">defer</span> <span class="p">{</span>
+      <span class="n">destData</span><span class="o">.</span><span class="nf">dealloc</span><span class="p">(</span><span class="n">dataSize</span><span class="p">)</span>
+   <span class="p">}</span>
+   <span class="k">guard</span> <span class="n">error</span> <span class="k">else</span> <span class="p">{</span>
+      <span class="k">return</span> <span class="kc">nil</span>
+   <span class="p">}</span>
+   <span class="k">guard</span> <span class="n">error2</span> <span class="k">else</span> <span class="p">{</span>
+      <span class="k">return</span> <span class="kc">nil</span>
+   <span class="p">}</span>
+   <span class="k">guard</span> <span class="n">error3</span> <span class="k">else</span> <span class="p">{</span>
+      <span class="k">return</span> <span class="kc">nil</span>
+   <span class="p">}</span>
+   <span class="c1">// ...</span>
+<span class="p">}</span></code></pre></figure>
+
+<p><strong>7.函数式</strong>  <br />
+Swift引进了一系列函数式编程的特征，例如用于集合遍历的<em>map</em>和<em>fliter</em>。而Objective-C本身并不支持函数式编程，如果想在Objective-C使用函数式编程，必须使用一些第三方的库，例如ReactiveCocoa。</p>
+
+<figure class="highlight"><pre><code class="language-swift" data-lang="swift"><span class="k">let</span> <span class="nv">a</span> <span class="o">=</span> <span class="p">[</span><span class="mi">4</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">16</span><span class="p">]</span>
+   <span class="nf">print</span><span class="p">(</span><span class="n">a</span><span class="o">.</span><span class="n">map</span><span class="p">{</span><span class="nv">$0</span> <span class="o">/</span> <span class="mi">2</span><span class="p">})</span>
+   <span class="c1">// [2, 4, 8]</span>
+   <span class="k">let</span> <span class="nv">a</span><span class="p">:[(</span><span class="nv">name</span><span class="p">:</span><span class="kt">String</span><span class="p">,</span> <span class="nv">area</span><span class="p">:</span><span class="kt">String</span><span class="p">)]</span> <span class="o">=</span> <span class="p">[(</span><span class="s">"John"</span><span class="p">,</span> <span class="s">"iOS"</span><span class="p">),</span> <span class="p">(</span><span class="s">"Sam"</span><span class="p">,</span> <span class="s">"Android"</span><span class="p">),</span> <span class="p">(</span><span class="s">"Paul"</span><span class="p">,</span> <span class="s">"Web"</span><span class="p">)]</span>
+   <span class="k">let</span> <span class="nv">b</span> <span class="o">=</span> <span class="n">a</span><span class="o">.</span><span class="nf">map</span><span class="p">({</span><span class="s">"Developer </span><span class="se">\(</span><span class="nv">$0</span><span class="o">.</span><span class="n">name</span><span class="se">)</span><span class="s"> (</span><span class="se">\(</span><span class="nv">$0</span><span class="o">.</span><span class="n">area</span><span class="se">)</span><span class="s">)"</span><span class="p">})</span>
+   <span class="c1">// ["Developer John (iOS)", "Developer Sam (Android)", "Developer Paul (Web)”]</span>
+   <span class="k">let</span> <span class="nv">a</span> <span class="o">=</span> <span class="p">[</span><span class="mi">23</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">12</span><span class="p">,</span> <span class="mi">10</span><span class="p">]</span>
+   <span class="k">let</span> <span class="nv">b</span> <span class="o">=</span> <span class="n">a</span><span class="o">.</span><span class="n">filter</span><span class="p">{</span><span class="nv">$0</span> <span class="o">&gt;</span> <span class="mi">10</span><span class="p">}</span>
+   <span class="nf">print</span><span class="p">(</span><span class="n">b</span><span class="p">)</span> <span class="c1">// [23, 12]</span>
+   <span class="k">let</span> <span class="nv">sum</span> <span class="o">=</span> <span class="p">(</span><span class="mi">20</span><span class="o">...</span><span class="mi">30</span><span class="p">)</span>
+   <span class="o">.</span><span class="n">filter</span> <span class="p">{</span> <span class="nv">$0</span> <span class="o">%</span> <span class="mi">2</span> <span class="o">!=</span> <span class="mi">0</span> <span class="p">}</span>
+   <span class="o">.</span><span class="n">map</span> <span class="p">{</span> <span class="nv">$0</span> <span class="o">*</span> <span class="mi">2</span> <span class="p">}</span>
+   <span class="o">.</span><span class="nf">reduce</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span> <span class="p">{</span> <span class="nv">$0</span> <span class="o">+</span> <span class="nv">$1</span> <span class="p">}</span>
+   <span class="nf">print</span><span class="p">(</span><span class="n">sum</span><span class="p">)</span> <span class="c1">// 250</span></code></pre></figure>
+
+<p><strong>8.枚举</strong>  <br />
+在Swift中，枚举更加强大，可以在枚举中定义方法，传值等。可以通过下面的例子一窥枚举在Swift中的使用方法。</p>
+
+<figure class="highlight"><pre><code class="language-swift" data-lang="swift"><span class="kd">enum</span> <span class="kt">Location</span> <span class="p">{</span>
+   <span class="k">case</span> <span class="kt">Address</span><span class="p">(</span><span class="nv">city</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="nv">street</span><span class="p">:</span> <span class="kt">String</span><span class="p">)</span>
+   <span class="k">case</span> <span class="kt">Coordinates</span><span class="p">(</span><span class="nv">lat</span><span class="p">:</span> <span class="kt">Float</span><span class="p">,</span> <span class="nv">lon</span><span class="p">:</span> <span class="kt">Float</span><span class="p">)</span>
+   <span class="kd">func</span> <span class="nf">printOut</span><span class="p">()</span> <span class="p">{</span>
+      <span class="k">switch</span> <span class="k">self</span> <span class="p">{</span>
+         <span class="k">case</span> <span class="kd">let</span><span class="o">.</span><span class="kt">Address</span><span class="p">(</span><span class="n">city</span><span class="p">,</span> <span class="n">street</span><span class="p">):</span>
+            <span class="nf">print</span><span class="p">(</span><span class="s">"Address: "</span> <span class="o">+</span> <span class="n">street</span> <span class="o">+</span> <span class="s">", "</span> <span class="o">+</span> <span class="n">city</span><span class="p">)</span>
+         <span class="k">case</span> <span class="kd">let</span><span class="o">.</span><span class="kt">Coordinates</span><span class="p">(</span><span class="n">lat</span><span class="p">,</span> <span class="n">lon</span><span class="p">):</span>
+            <span class="nf">print</span><span class="p">(</span><span class="s">"Coordiantes: (</span><span class="se">\(</span><span class="n">lat</span><span class="se">)</span><span class="s">, </span><span class="se">\(</span><span class="n">lon</span><span class="se">)</span><span class="s">)"</span><span class="p">)</span>
+      <span class="p">}</span>
+   <span class="p">}</span>
+<span class="p">}</span>
+<span class="k">let</span> <span class="nv">loc1</span> <span class="o">=</span> <span class="kt">Location</span><span class="o">.</span><span class="kt">Address</span><span class="p">(</span><span class="nv">city</span><span class="p">:</span> <span class="s">"Boston"</span><span class="p">,</span> <span class="nv">street</span><span class="p">:</span> <span class="s">"33 Court St"</span><span class="p">)</span>
+<span class="k">let</span> <span class="nv">loc2</span> <span class="o">=</span> <span class="kt">Location</span><span class="o">.</span><span class="kt">Coordinates</span><span class="p">(</span><span class="nv">lat</span><span class="p">:</span> <span class="mf">42.3586</span><span class="p">,</span> <span class="nv">lon</span><span class="p">:</span> <span class="o">-</span><span class="mf">71.0590</span><span class="p">)</span>
+<span class="n">loc1</span><span class="o">.</span><span class="nf">printOut</span><span class="p">()</span> <span class="c1">// Address: 33 Court St, Boston</span>
+<span class="n">loc2</span><span class="o">.</span><span class="nf">printOut</span><span class="p">()</span> <span class="c1">// Coordiantes: (42.3586, -71.059)</span></code></pre></figure>
+
+<p>枚举还可以实现递归，因此我们使用枚举构建一个链表。</p>
+
+<figure class="highlight"><pre><code class="language-swift" data-lang="swift"><span class="kd">enum</span> <span class="kt">List</span> <span class="p">{</span>
+   <span class="k">case</span> <span class="kt">Empty</span>
+      <span class="kd">indirect</span>
+   <span class="k">case</span> <span class="kt">Cell</span><span class="p">(</span><span class="nv">value</span><span class="p">:</span> <span class="kt">Int</span><span class="p">,</span> <span class="nv">next</span><span class="p">:</span> <span class="kt">List</span><span class="p">)</span>
+<span class="p">}</span>
+<span class="k">let</span> <span class="nv">list0</span> <span class="o">=</span> <span class="kt">List</span><span class="o">.</span><span class="kt">Cell</span><span class="p">(</span><span class="nv">value</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="nv">next</span><span class="p">:</span> <span class="kt">List</span><span class="o">.</span><span class="kt">Empty</span><span class="p">)</span>
+<span class="k">let</span> <span class="nv">list1</span> <span class="o">=</span> <span class="kt">List</span><span class="o">.</span><span class="kt">Cell</span><span class="p">(</span><span class="nv">value</span><span class="p">:</span> <span class="mi">4</span><span class="p">,</span> <span class="nv">next</span><span class="p">:</span> <span class="n">list0</span><span class="p">)</span>
+<span class="k">let</span> <span class="nv">list2</span> <span class="o">=</span> <span class="kt">List</span><span class="o">.</span><span class="kt">Cell</span><span class="p">(</span><span class="nv">value</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="nv">next</span><span class="p">:</span> <span class="n">list1</span><span class="p">)</span>
+<span class="k">let</span> <span class="nv">list3</span> <span class="o">=</span> <span class="kt">List</span><span class="o">.</span><span class="kt">Cell</span><span class="p">(</span><span class="nv">value</span><span class="p">:</span> <span class="mi">6</span><span class="p">,</span> <span class="nv">next</span><span class="p">:</span> <span class="n">list2</span><span class="p">)</span>
+<span class="k">let</span> <span class="nv">headL</span> <span class="o">=</span> <span class="kt">List</span><span class="o">.</span><span class="kt">Cell</span><span class="p">(</span><span class="nv">value</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span> <span class="nv">next</span><span class="p">:</span> <span class="n">list3</span><span class="p">)</span>
+<span class="kd">func</span> <span class="nf">evaluateList</span><span class="p">(</span><span class="nv">list</span><span class="p">:</span> <span class="kt">List</span><span class="p">)</span> <span class="o">-</span> <span class="o">&gt;</span> <span class="kt">Int</span> <span class="p">{</span>
+   <span class="k">switch</span> <span class="n">list</span> <span class="p">{</span>
+      <span class="k">case</span> <span class="kd">let</span><span class="o">.</span><span class="kt">Cell</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">next</span><span class="p">):</span>
+         <span class="k">return</span> <span class="n">value</span> <span class="o">+</span> <span class="nf">evaluateList</span><span class="p">(</span><span class="n">next</span><span class="p">)</span>
+      <span class="k">case</span> <span class="o">.</span><span class="kt">Empty</span><span class="p">:</span>
+         <span class="k">return</span> <span class="mi">0</span>
+   <span class="p">}</span>
+<span class="p">}</span>
+<span class="nf">print</span><span class="p">(</span><span class="nf">evaluateList</span><span class="p">(</span><span class="n">headL</span><span class="p">))</span> <span class="c1">// 16</span></code></pre></figure>
+
+<p><strong>9.函数</strong>  <br />
+Swift的每一个函数都有一个类型，这个类型有函数的参数类型和返回值类型组成。这意味着函数可以作为变量，也可以作为参数传递给其他函数。</p>
+
+<figure class="highlight"><pre><code class="language-swift" data-lang="swift"><span class="kd">func</span> <span class="nf">stringCharactersCount</span><span class="p">(</span><span class="nv">s</span><span class="p">:</span> <span class="kt">String</span><span class="p">)</span> <span class="o">-</span> <span class="o">&gt;</span> <span class="kt">Int</span> <span class="p">{</span>
+   <span class="k">return</span> <span class="n">s</span><span class="o">.</span><span class="n">characters</span><span class="o">.</span><span class="n">count</span>
+<span class="p">}</span>
+<span class="kd">func</span> <span class="nf">stringToInt</span><span class="p">(</span><span class="nv">s</span><span class="p">:</span> <span class="kt">String</span><span class="p">)</span> <span class="o">-</span> <span class="o">&gt;</span> <span class="kt">Int</span> <span class="p">{</span>
+   <span class="k">if</span> <span class="k">let</span> <span class="nv">x</span> <span class="o">=</span> <span class="kt">Int</span><span class="p">(</span><span class="n">s</span><span class="p">)</span> <span class="p">{</span>
+      <span class="k">return</span> <span class="n">x</span>
+   <span class="p">}</span>
+   <span class="k">return</span> <span class="mi">0</span>
+<span class="p">}</span>
+<span class="kd">func</span> <span class="nf">executeSuccessor</span><span class="p">(</span><span class="nv">f</span><span class="p">:</span> <span class="kt">String</span> <span class="o">-</span> <span class="o">&gt;</span> <span class="kt">Int</span><span class="p">,</span> <span class="nv">s</span><span class="p">:</span> <span class="kt">String</span><span class="p">)</span> <span class="o">-</span> <span class="o">&gt;</span> <span class="kt">Int</span> <span class="p">{</span>
+   <span class="k">return</span> <span class="nf">f</span><span class="p">(</span><span class="n">s</span><span class="p">)</span><span class="o">.</span><span class="nf">successor</span><span class="p">()</span>
+<span class="p">}</span>
+<span class="k">let</span> <span class="nv">f1</span> <span class="o">=</span> <span class="n">stringCharactersCount</span>
+<span class="k">let</span> <span class="nv">f2</span> <span class="o">=</span> <span class="n">stringToInt</span>
+<span class="nf">executeSuccessor</span><span class="p">(</span><span class="n">f1</span><span class="p">,</span> <span class="nv">s</span><span class="p">:</span> <span class="s">"5555"</span><span class="p">)</span> <span class="c1">// 5</span>
+<span class="nf">executeSuccessor</span><span class="p">(</span><span class="n">f2</span><span class="p">,</span> <span class="nv">s</span><span class="p">:</span> <span class="s">"5555"</span><span class="p">)</span> <span class="c1">// 5556</span></code></pre></figure>
+
+<p>Swift还可以给函数参数定义默认值。</p>
+
+<figure class="highlight"><pre><code class="language-swift" data-lang="swift"><span class="kd">func</span> <span class="nf">myFunction</span><span class="p">(</span><span class="nv">someInt</span><span class="p">:</span> <span class="kt">Int</span> <span class="o">=</span> <span class="mi">5</span><span class="p">)</span> <span class="p">{</span>
+   <span class="c1">// If no arguments are passed, the value of someInt is 5</span>
+<span class="p">}</span>
+<span class="nf">myFunction</span><span class="p">(</span><span class="mi">6</span><span class="p">)</span> <span class="c1">// someInt is 6</span>
+<span class="nf">myFunction</span><span class="p">()</span> <span class="c1">// someInt is 5</span></code></pre></figure>
+
+<p><strong>10.Do 语句</strong>  <br />
+Swift可以使用<em>do</em>来捕获异常。</p>
+
+<figure class="highlight"><pre><code class="language-swift" data-lang="swift"><span class="k">do</span> <span class="p">{</span>
+   <span class="k">try</span> <span class="n">expression</span>
+   <span class="n">statements</span>
+<span class="p">}</span> <span class="k">catch</span> <span class="n">pattern</span> <span class="mi">1</span> <span class="p">{</span>
+   <span class="n">statements</span>
+<span class="p">}</span> <span class="k">catch</span> <span class="n">pattern</span> <span class="mi">2</span> <span class="k">where</span> <span class="n">condition</span> <span class="p">{</span>
+   <span class="n">statements</span>
+<span class="p">}</span></code></pre></figure>
+:ET

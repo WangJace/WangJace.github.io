@@ -1,0 +1,58 @@
+I"=<p>一般当线程执行完一个任务就会自动退出，线程占用的资源也会被系统所回收。为了让线程能够长时间存在不退出，iOS引入了RunLoop，当线程有任务需要处理的时候唤醒线程并执行任务，当没有任务的时候将线程挂起（节省系统资源）。  <br />
+在iOS的App中，线程和RunLoop是意义对应的，它们之间的关系保存在一个全局的Dictionary里。线程刚创建时并没有RunLoop，如果没有主动获取，那它一直都不会有。而主线程的RunLoop在App启动时也同时创建并运行，这样才能让主线程一直运行，响应用户的各种操作。  <br />
+RunLoop的创建是发生在第一次获取时，RunLoop的销毁时发生在线程退出的时候。RunLoop的获取只能在线程的内部（主线程除外）。</p>
+<h3 id="runloop-的操作">RunLoop 的操作</h3>
+<p>在CoreFoundation中关于RunLoop有5个类：  <br />
+CFRunLoopRef  <br />
+CFRunLoopModeRef  <br />
+CFRunLoopSourceRef  <br />
+CFRunLoopTimerRef  <br />
+CFRunLoopObserverRef  <br />
+其中CFRunLoopModeRef类并没有对外暴露，只是通过CFRunLoopRef的接口进行了封装。他们的关系如下：
+<img src="/assets/article_images/2018-06-10-浅谈RunLoop01.png" alt="RunLoop的关系图" />
+一个RunLoop包含若干个Mode，每个Mode又包含若干个Source/Timer/Observer。每次调用RunLoop的主函数时，只能指定其中一个Mode，这个Mode被称作CurrentMode。  <br />
+<strong>CFRunLoopSourceRef</strong> 是时间产生的地方。Source的两个版本Source0和Source1.  <br />
+• Source0只包含一个回调，它并不能主动触发事件。  <br />
+• Source1包含一个mach_port和一个回调，被用于通过内核和其他线程相互发送消息。这种Source能主动唤醒RunLoop的线程。  <br />
+<strong>CFRunLoopTimerRef</strong> 是基于时间的触发器。其包含一个时间长度和一个回调。当其加入到RunLoop时，RunLoop会注册对应的时间点，当时间点到时，RunLoop的线程会被唤醒以执行那个回调。  <br />
+<strong>CFRunLoopObserverRef</strong> 是观察者，每个Observer都包含了一个回调，当RunLoop的状态发生变化时，观察者就能通过回调接收到这个变化。可以监听的RunLoop状态有以下几个：</p>
+
+<figure class="highlight"><pre><code class="language-c" data-lang="c"><span class="k">typedef</span> <span class="nf">CF_OPTIONS</span><span class="p">(</span><span class="n">CFOptionFlags</span><span class="p">,</span> <span class="n">CFRunLoopActivity</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">kCFRunLoopEntry</span>         <span class="o">=</span> <span class="p">(</span><span class="mi">1UL</span> <span class="o">&lt;&lt;</span> <span class="mi">0</span><span class="p">),</span> <span class="c1">// 即将进入Loop</span>
+    <span class="n">kCFRunLoopBeforeTimers</span>  <span class="o">=</span> <span class="p">(</span><span class="mi">1UL</span> <span class="o">&lt;&lt;</span> <span class="mi">1</span><span class="p">),</span> <span class="c1">// 即将处理 Timer</span>
+    <span class="n">kCFRunLoopBeforeSources</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1UL</span> <span class="o">&lt;&lt;</span> <span class="mi">2</span><span class="p">),</span> <span class="c1">// 即将处理 Source</span>
+    <span class="n">kCFRunLoopBeforeWaiting</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1UL</span> <span class="o">&lt;&lt;</span> <span class="mi">5</span><span class="p">),</span> <span class="c1">// 即将进入休眠</span>
+    <span class="n">kCFRunLoopAfterWaiting</span>  <span class="o">=</span> <span class="p">(</span><span class="mi">1UL</span> <span class="o">&lt;&lt;</span> <span class="mi">6</span><span class="p">),</span> <span class="c1">// 刚从休眠中唤醒</span>
+    <span class="n">kCFRunLoopExit</span>          <span class="o">=</span> <span class="p">(</span><span class="mi">1UL</span> <span class="o">&lt;&lt;</span> <span class="mi">7</span><span class="p">),</span> <span class="c1">// 即将退出Loop</span>
+<span class="p">};</span></code></pre></figure>
+
+<h3 id="runloop的mode">RunLoop的Mode</h3>
+<p>CFRunLoopMode和CFRunLoop的结构大致如下：</p>
+
+<figure class="highlight"><pre><code class="language-c" data-lang="c"><span class="k">struct</span> <span class="n">__CFRunLoopMode</span> <span class="p">{</span>
+    <span class="n">CFStringRef</span> <span class="n">_name</span><span class="p">;</span>            <span class="c1">// Mode Name, 例如 @"kCFRunLoopDefaultMode"</span>
+    <span class="n">CFMutableSetRef</span> <span class="n">_sources0</span><span class="p">;</span>    <span class="c1">// Set</span>
+    <span class="n">CFMutableSetRef</span> <span class="n">_sources1</span><span class="p">;</span>    <span class="c1">// Set</span>
+    <span class="n">CFMutableArrayRef</span> <span class="n">_observers</span><span class="p">;</span> <span class="c1">// Array</span>
+    <span class="n">CFMutableArrayRef</span> <span class="n">_timers</span><span class="p">;</span>    <span class="c1">// Array</span>
+    <span class="p">...</span>
+<span class="p">};</span>
+<span class="k">struct</span> <span class="n">__CFRunLoop</span> <span class="p">{</span>
+    <span class="n">CFMutableSetRef</span> <span class="n">_commonModes</span><span class="p">;</span>     <span class="c1">// Set</span>
+    <span class="n">CFMutableSetRef</span> <span class="n">_commonModeItems</span><span class="p">;</span> <span class="c1">// Set&lt;Source/Observer/Timer&gt;</span>
+    <span class="n">CFRunLoopModeRef</span> <span class="n">_currentMode</span><span class="p">;</span>    <span class="c1">// Current Runloop Mode</span>
+    <span class="n">CFMutableSetRef</span> <span class="n">_modes</span><span class="p">;</span>           <span class="c1">// Set</span>
+    <span class="p">...</span>
+<span class="p">};</span></code></pre></figure>
+
+<p>这里有一个概念叫“CommonModes”：一个Mode可以将自己标记为“Common”属性（通过将其ModeName添加到RunLoop的“commonModes”中）。每当RunLoop的内容发生变化时，RunLoop都会自动将_commonModeItems里的Source/Observer/Timer同步到具有“Common”标记的所有Mode里。  <br />
+应用场景举例：主线程的RunLoop里有两个预置的Mode：kCFRunLoopDefaultMode 和 UITrackingRunLoopMode。这两个Mode都已经被标记为“Common”属性。DefaultMode时App平时所处的状态，TrackingRunLoopMode是追踪ScrollView滑动时的状态。当你创建一个Timer并驾到DefaultMode时，Timer会得到重复回调，但此时滑动一个TableView时，RunLoop会将mode切换为TrackingRunLoopMode，这时Timer就不会被回调，并且也不会影响到滑动操作。
+有时你需要一个Timer，在两个Mode都能得到回调，一种办法就是将这个Timer分别加入这两个Mode。还有一种方式，就是将Timer加入到顶层的RunLoop的“commonModeItems”中。“commonModeItems”被RunLoop自动更新到所有具有“Common”属性的Mode中。  <br />
+iOS开发中，系统默认注册了5个Mode：  <br />
+<strong>• kCFRunLoopDefaultMode(NSDefultRunLoopMode)</strong>：App的默认Mode，通常主线程会在这个Mode下运行。  <br />
+<strong>• UITrakingRunLoopMode</strong>：界面跟踪Mode，用于ScrollView追踪触摸滑动，保证界面滑动时不受其他Mode影响。  <br />
+<strong>• UIInitializationRunLoopMode</strong>：在刚启动App时进入的第一个Mode，启动完成后就不再使用。  <br />
+<strong>• GSEventReceiveRunLoopMode</strong>：接受系统事件的内部Mode，通常用不到。  <br />
+<strong>• kCFRunLoopCommonModes</strong>：这是一个占位的Mode，是一个操作Common标记的Mode的字符串，可以用这个字符串来操作Common Items，或标记一个Mode为“Common”。</p>
+
+:ET

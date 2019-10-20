@@ -1,0 +1,31 @@
+I"<ul>
+  <li>
+    <p>iOS APP开启iTunes文件共享  <br />
+在工程的Info.plist文件中添加支持iTunes文件共享的Key:Application supports iTunes file sharing，并将值设为YES，这样APP中Docunmets文件夹的文件就可以通过iTunes共享了。</p>
+  </li>
+  <li>
+    <p>获取app的版本号、app名称</p>
+  </li>
+</ul>
+
+<figure class="highlight"><pre><code class="language-objective-c" data-lang="objective-c">NSDictionary *infoDictionary = [[NSBundle mainBundle] infoDictionary];
+// app名称
+NSString *app_Name = [infoDictionary objectForKey:@"CFBundleDisplayName"];
+// app版本
+NSString *app_Version = [infoDictionary objectForKey:@"CFBundleShortVersionString"];
+// app build版本
+NSString *app_build = [infoDictionary objectForKey:@"CFBundleVersion"];    </code></pre></figure>
+
+<ul>
+  <li>判断app是否为第一次启动</li>
+</ul>
+
+<figure class="highlight"><pre><code class="language-objective-c" data-lang="objective-c">if (![[NSUserDefaults standardUserDefaults] boolForKey:@"everLaunched"]) {
+    [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"everLaunched"];
+    [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"firstLaunch"]; 
+}
+else{
+    [[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"firstLaunch"];
+}</code></pre></figure>
+
+:ET

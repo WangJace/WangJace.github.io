@@ -25,9 +25,12 @@ blog_button:
     # - {title: Another Button, description: A button, url: 'http://example.com'}
 
 # Pagination
-gems: [jekyll-paginate]
-paginate: 10
-paginate_path: "page/:num/"
+#gems: [jekyll-paginate]
+#paginate: 10
+#paginate_path: "page/:num/"
+plugins:
+  - jekyll-paginate
+paginate: 5
 
 # Comment
 comment:

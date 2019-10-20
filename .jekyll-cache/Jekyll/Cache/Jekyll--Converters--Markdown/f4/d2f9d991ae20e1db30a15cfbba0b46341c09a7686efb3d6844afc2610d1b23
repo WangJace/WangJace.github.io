@@ -1,0 +1,24 @@
+I"�<p>在Objective-C开发中，经常会使用到宏定义来定义一些全局变量和一些简单的全局方法。但在swift中并不支持宏定义语法，但可以利用swift项目共享命名空间这一特点，在项目中使用Const.swift来定义这些全局变量和公用方法</p>
+
+<p>1.不带参数的宏定义</p>
+
+<figure class="highlight"><pre><code class="language-objective-c" data-lang="objective-c">//Objective-C写法
+#define kScreenWidth CGRectGetWidth([UIScreen mainScreen].bounds)
+#define kScreenHeight CGRectGetHeight([UIScreen mainScreen].bounds)</code></pre></figure>
+
+<figure class="highlight"><pre><code class="language-swift" data-lang="swift"><span class="c1">//swift写法</span>
+<span class="k">let</span> <span class="nv">kScreenWidth</span> <span class="o">=</span> <span class="kt">CGRectGetWidth</span><span class="p">(</span><span class="kt">UIScreen</span><span class="o">.</span><span class="nf">mainScreen</span><span class="p">()</span><span class="o">.</span><span class="n">bounds</span><span class="p">)</span>
+<span class="k">let</span> <span class="nv">kScreenHeight</span> <span class="o">=</span> <span class="kt">CGRectGetHeight</span><span class="p">(</span><span class="kt">UIScreen</span><span class="o">.</span><span class="nf">mainScreen</span><span class="p">()</span><span class="o">.</span><span class="n">bounds</span><span class="p">)</span></code></pre></figure>
+
+<p>2.带参数的宏定义</p>
+
+<figure class="highlight"><pre><code class="language-objective-c" data-lang="objective-c">//Objective-C写法
+#define RGBCOLOR(r,g,b,a) [UIColor colorWithRed:(r)/255.0 green:(g)/255.0 blue:(b)/255.0 alpha:a]</code></pre></figure>
+
+<figure class="highlight"><pre><code class="language-swift" data-lang="swift"><span class="c1">//swift写法</span>
+<span class="kd">func</span> <span class="kt">RGBCOLOR</span><span class="p">(</span><span class="nv">r</span><span class="p">:</span><span class="kt">CGFloat</span><span class="p">,</span><span class="n">_</span> <span class="nv">g</span><span class="p">:</span><span class="kt">CGFloat</span><span class="p">,</span> <span class="n">_</span> <span class="nv">b</span><span class="p">:</span><span class="kt">CGFloat</span><span class="p">,</span> <span class="n">_</span> <span class="nv">a</span><span class="p">:</span><span class="kt">CGFloat</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">UIColor</span>
+<span class="p">{</span>
+    <span class="k">return</span> <span class="kt">UIColor</span><span class="p">(</span><span class="nv">red</span><span class="p">:</span> <span class="p">(</span><span class="n">r</span><span class="p">)</span><span class="o">/</span><span class="mf">255.0</span><span class="p">,</span> <span class="nv">green</span><span class="p">:</span> <span class="p">(</span><span class="n">g</span><span class="p">)</span><span class="o">/</span><span class="mf">255.0</span><span class="p">,</span> <span class="nv">blue</span><span class="p">:</span> <span class="p">(</span><span class="n">b</span><span class="p">)</span><span class="o">/</span><span class="mf">255.0</span><span class="p">,</span> <span class="nv">alpha</span><span class="p">:</span> <span class="n">a</span><span class="p">)</span>
+<span class="p">}</span></code></pre></figure>
+
+:ET

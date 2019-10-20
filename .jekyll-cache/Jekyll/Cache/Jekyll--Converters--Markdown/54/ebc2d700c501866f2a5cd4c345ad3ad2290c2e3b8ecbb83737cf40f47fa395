@@ -1,0 +1,7 @@
+I"<p>CSS中选择器的作用在于「选择」，目的是为了能够把定义好的 CSS 样式作用于指定 HTML 标签上，比如想让 p 标签的字体颜色变为红色。<br />
+CSS 相关的语法可以通过下面这张图来读懂：
+<img src="/assets/article_images/2019-10-20-CSS中的选择器详解01.png" alt="CSS语法图" /></p>
+<blockquote>
+  <p>注意：写 CSS 代码的时候，即使某个属性写错，浏览器也不会报错，只会忽略无法识别的 CSS 样式。</p>
+</blockquote>
+:ET

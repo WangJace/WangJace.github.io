@@ -1,0 +1,9 @@
+I"�<p>在iOS开发中，在展示统计数据的时候，时常会选择柱状图、线形图、饼状图的表现方式。而Core Plot就是一个用来绘制这些统计图的开源库。<br />
+在开始了解Core Plot这个库之前，要清楚Core Plot不仅可以用于iOS平台，也可以用于Mac OS X平台，所以呢，就会有一些限制：不能使用 <em>AppKit</em>。而<em>UIView</em> 相关的操作只能在 <em>CPTGraphHostingView</em> 中进行。绘图的实现使用了底层的 <em>Quartz 2D API</em>，并且使用 <em>Core Animation</em> 来创建 <em>layer</em> 层视图。<br />
+先通过一张图了解一下Core Plot库中主要类的层次结构：
+<img src="/assets/article_images/2018-11-16-Core Plot的使用(一)：基础篇01.png" alt="Core Plot库中类层次结构.png" />
+Core Plot库中主要类在视图中的层级关系：
+<img src="/assets/article_images/2018-11-16-Core Plot的使用(一)：基础篇02.png" alt="Core Plot库中类在视图中对应的层级关系.png" />
+Core Plot库中主要类在视图中的位置：
+<img src="/assets/article_images/2018-11-16-Core Plot的使用(一)：基础篇03.png" alt="Core Plot库中类在视图中的位置.png" /></p>
+:ET

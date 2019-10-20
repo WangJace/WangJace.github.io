@@ -1,0 +1,11 @@
+I"�<p>使用 <em>Core Plot</em> 绘制线形图实际上与绘制柱状图差不多的，都是先创建 <em>CPTGraphHostingView</em>，然后初始化 <em>CPTGraph</em>，设置坐标轴和 <em>plotSpace</em>，不同的是在初始化 <em>plot</em> 和代理方法的实现上有些不一样。所以下面就只讲解不同的部分，其他的移步<a href="http://blog.wangjace.site/2018/11/Core-Plot%E7%9A%84%E4%BD%BF%E7%94%A8(%E4%BA%8C)-%E6%9F%B1%E7%8A%B6%E5%9B%BE/">上一篇</a>文章
+```Objective-C
+// 初始化plot
+CPTScatterPlot *linePlot = [[CPTScatterPlot alloc] init];
+linePlot.dataSource = self;
+linePlot.identifier = @”LineChart”;       // 线形图的标识符
+// 设置线条风格，可选类型：CPTScatterPlotInterpolationLinear、CPTScatterPlotInterpolationStepped、CPTScatterPlotInterpolationHistogram、CPTScatterPlotInterpolationCurved
+linePlot.interpolation = CPTScatterPlotInterpolationCurved;     // 如果想要折线图的效果可以使用CPTScatterPlotInterpolationLinear
+lineStyle.lineColor = LineChartDefaultColor(1.0);     // 设置线条颜色
+linePlot.dataLineStyle = lineStyle;       // 设置线条风格</p>
+:ET

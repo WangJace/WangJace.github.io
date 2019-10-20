@@ -1,0 +1,113 @@
+I"�<p>首先是选择云端服务器平台，<a href="https://www.zhihu.com/question/20800554/answer/71397836">知乎</a>上有各个VPS平台的对比，这里个人推荐用<a href="https://www.digitalocean.com/">Digitalocean</a>和<a href="https://www.vultr.com/">Vutrl</a>。本文选用的是Vutrl。  <br />
+首先是在平台上注册账号，并绑定信用卡或者Paypal账号。（注：绑定完信用卡或者Paypal账号才能创建虚拟服务器）。</p>
+
+<p><strong>• 创建云服务器</strong></p>
+
+<p>1.选择服务器的区域
+<img src="/assets/article_images/2018-02-28-使用Shadowsocks搭建VPS01.png" alt="image-01" />
+至于选择哪个区域比较快，可以在Vutrl提供的<a href="https://www.vultr.com/faq/">服务器测速地址</a>来测试一下。
+<img src="/assets/article_images/2018-02-28-使用Shadowsocks搭建VPS02.png" alt="image-02" />
+点击各个测试地址可以看到具体的ip地址
+<img src="/assets/article_images/2018-02-28-使用Shadowsocks搭建VPS03.png" alt="image-03" />
+可以在本地的终端ping一下，测试下本地网络是否能够访问该区域的服务器。
+<img src="/assets/article_images/2018-02-28-使用Shadowsocks搭建VPS04.png" alt="image-04" />
+本文测试了一下ping纽约节点的服务器，丢包率6.7%，访问延时200毫秒。可以根据这个来判断哪个节点回更快，一般东京、新加坡的节点会比较快一点。  <br />
+2.选择服务器系统：Ubuntu 17.10 x64
+<img src="/assets/article_images/2018-02-28-使用Shadowsocks搭建VPS05.png" alt="image-05" />
+3.选择服务器大小：最低配置的$5/mo就够了
+<img src="/assets/article_images/2018-02-28-使用Shadowsocks搭建VPS06.png" alt="image-06" />
+4.其他的设置，hostname根据个人随意设置
+<img src="/assets/article_images/2018-02-28-使用Shadowsocks搭建VPS07.png" alt="image-07" />
+5.点击Deploy Now创建服务器。当Status显示Running的时候，就证明服务器已经创建成功并启动
+<img src="/assets/article_images/2018-02-28-使用Shadowsocks搭建VPS08.png" alt="image-08" /></p>
+
+<p><strong>• 修改Root密码</strong></p>
+
+<p>点击服务器进入查看服务器信息
+<img src="/assets/article_images/2018-02-28-使用Shadowsocks搭建VPS09.png" alt="image-09" />
+点击右上角进入console窗口（会弹出一个新窗口），注意远程端口出现的时间可能会需要一段时间，如果等了很久都没出现，就关闭重试一次
+<img src="/assets/article_images/2018-02-28-使用Shadowsocks搭建VPS10.png" alt="image-10" />
+输入root，然后Enter，输入root密码（在服务器信息中查找）。ps:输入的时候是不会出现输入结果的，直接按顺序准确输入就行。成功登录后，输入 <em>passwd root</em> 修改root密码，密码需输入两次进行确认。
+<img src="/assets/article_images/2018-02-28-使用Shadowsocks搭建VPS11.png" alt="image-11" /></p>
+
+<p><strong>• 安装Shadowsocks server端</strong></p>
+
+<p>使用root用户登录，运行以下命令：
+{% highlight shell %}
+wget –no-check-certificate -O shadowsocks.sh https://raw.githubusercontent.com/teddysun/shadowsocks_install/master/shadowsocks.sh
+chmod +x shadowsocks.sh
+./shadowsocks.sh 2&gt;&amp;1 | tee shadowsocks.log
+{% endhighlight %}
+安装完成后，需要设置服务器ip、端口(8989)、密码、加密方式（rc4-md5），脚本提示如下：
+{% highlight shell %}
+Congratulations, Shadowsocks-python server install completed!
+Your Server IP        :your_server_ip
+Your Server Port      :your_server_port
+Your Password         :your_password
+Your Encryption Method:your_encryption_method
+Welcome to visit:https://teddysun.com/342.html
+Enjoy it!
+{% endhighlight %}
+卸载方法：
+使用root用户登录，运行以下命令：
+{% highlight shell %}
+./shadowsocks.sh uninstall
+{% endhighlight %}
+配置文件：/etc/shadowsocks.json，运行以下命令编辑配置文件：
+{% highlight shell %}
+vi /etc/shadowsocks.json
+{% endhighlight %}
+配置文件使用vim编辑器进行编辑，关于vim如何使用，请<a href="https://www.vpser.net/manage/vi.html">移步</a>  <br />
+单用户配置文件示例：
+{% highlight shell %}
+{
+    “server”:”0.0.0.0”,
+    “server_port”:your_server_port,
+    “local_address”:”127.0.0.1”,
+    “local_port”:1080,
+    “password”:”your_password”,
+    “timeout”:300,
+    “method”:”your_encryption_method”,
+    “fast_open”: false
+}
+{% endhighlight %}
+多用户配置文件示例：
+{% highlight shell %}
+{
+    “server”:”0.0.0.0”,
+    “local_address”:”127.0.0.1”,
+    “local_port”:1080,
+    “port_password”:{
+         “8989”:”password0”,
+         “9001”:”password1”,
+         “9002”:”password2”,
+         “9003”:”password3”,
+         “9004”:”password4”
+    },
+    “timeout”:300,
+    “method”:”your_encryption_method”,
+    “fast_open”: false
+}
+{% endhighlight %}</p>
+
+<p><strong>• Shadowsocks的使用命令</strong></p>
+
+<p>启动：/etc/init.d/shadowsocks start  <br />
+停止：/etc/init.d/shadowsocks stop  <br />
+重启：/etc/init.d/shadowsocks restart  <br />
+状态：/etc/init.d/shadowsocks status</p>
+
+<p><strong>• 使用Shadowsocks客户端</strong></p>
+
+<p>Shadowsocks的客户端支持各大主流平台，而且客户端的配置一般都很简单，只需要配置一下服务器的ip地址和之前设置好的连接密码，加密方式即可。Shadowsocks各个平台的客户端下载链接如下：</p>
+<ul>
+  <li><a href="https://github.com/shadowsocks/ShadowsocksX-NG/releases">OS X</a></li>
+  <li><a href="https://github.com/shadowsocks/shadowsocks-windows/releases">Windows</a></li>
+  <li><a href="https://github.com/shadowsocks/shadowsocks-android/releases">Android</a></li>
+  <li><a href="https://github.com/shadowsocks/shadowsocks-iOS/wiki/Help">iOS</a></li>
+  <li><a href="https://github.com/shadowsocks/shadowsocks/wiki/Ports-and-Clients">Others</a></li>
+</ul>
+
+<p>参考：<a href="https://teddysun.com/342.html">Shadowsocks Python版一键安装脚本</a></p>
+
+:ET

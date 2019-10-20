@@ -1,0 +1,25 @@
+I"<p>在iOS开发过程中，偶尔会遇到需要修改整个项目的工程名的需求。我在开发过程中也遇到了，本文整理了修改一个Xcode项目工程名的过程。  <br />
+<strong>写在前面的提醒：为了避免工程在改完工程名后运行不了又无法回滚，强烈建议在修改工程名之前先备份整个工程</strong></p>
+
+<p>第一步，打开Xcode工程，选中工程文件，按下图操作  <br />
+<img src="/assets/article_images/2016-08-06-修改Xcode工程名01.png" alt="Step1" /> <br />
+当输入完，单击Enter的时候，会弹出一个提示窗，如下图，单击Rename  <br />
+<img src="/assets/article_images/2016-08-06-修改Xcode工程名02.png" alt="Step2" />  <br />
+第二步，修改工程的根目录文件夹名称  <br />
+<img src="/assets/article_images/2016-08-06-修改Xcode工程名03.png" alt="Step3" />
+<img src="/assets/article_images/2016-08-06-修改Xcode工程名04.png" alt="Step4" />  <br />
+如果在修改文件夹名称的时候，工程是打开状态，则会弹出下列提示窗，直接点击close就行  <br />
+<img src="/assets/article_images/2016-08-06-修改Xcode工程名05.png" alt="Step5" />  <br />
+第三步，回到工程中，会发现工程目录下的文件都变成红色的了，不怕，请继续往下看  <br />
+<img src="/assets/article_images/2016-08-06-修改Xcode工程名06.png" alt="Step6" />
+<img src="/assets/article_images/2016-08-06-修改Xcode工程名07.png" alt="Step7" />  <br />
+第四步，重新设置工程的配置文件  <br />
+<img src="/assets/article_images/2016-08-06-修改Xcode工程名08.png" alt="Step8" />
+<img src="/assets/article_images/2016-08-06-修改Xcode工程名09.png" alt="Step9" />  <br />
+第五步，将Build Settings中出现旧工程名的地方改为新工程名  <br />
+第六步，修改Schemes的名称  <br />
+<img src="/assets/article_images/2016-08-06-修改Xcode工程名10.png" alt="Step10" />
+<img src="/assets/article_images/2016-08-06-修改Xcode工程名11.png" alt="Step11" />  <br />
+OK，运行编译。</p>
+
+:ET

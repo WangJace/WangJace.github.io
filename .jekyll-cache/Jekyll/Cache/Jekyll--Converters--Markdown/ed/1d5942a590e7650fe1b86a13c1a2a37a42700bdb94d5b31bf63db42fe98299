@@ -1,0 +1,54 @@
+I"<p>在iOS中定义一个属性的时候经常会使用到属性修饰符，本文主要讲解一些常用的属性修饰符的用法与区别</p>
+<h3 id="1atomic--nonatomic">1.atomic &amp; nonatomic</h3>
+<p>atomic为原子属性，系统会在setter方法加锁，避免出现线程安全问题，但会消耗更多的系统资源。
+{% highlight Objective-C %}
+@property (atomic, retain) id property;
+-(void)setProperty:(id) newValue {
+	{lock}
+		if (property != newValue) {
+			[property release];
+			property = [newValue retain];
+		}
+	{unlock}
+}
+{% endhighlight %}
+nonatomic为非原子属性，属性的赋值过程不加锁，多线程并发访问会提高性能。但有可能存在线程安全问题，即多个线程对属性值进行修改，导致该属性出现反问不安全。为了提高性能，一般都会使用nonatomic。  <br />
+注：atomic并不是绝对的线程安全。atomic的安全只是在getter和setter方法的时候是原子性操作，是安全的。但是其他方面是不在atomic管理范围之内的，即在getter和setter方法之外的操作，并无法保证线程安全。</p>
+<h3 id="2strong--retain">2.strong &amp; retain</h3>
+<p>strong和retain都是对对象的强引用，用这俩个修饰符的，引用计数都会加1，区别在于ARC下用strong，MRC下用retain。
+{% highlight Objective-C %}
+@property (nonatomic, retain) id property;
+-(void)setProperty:(id) newValue {
+	if (property != newValue) {
+		[property release];
+		property = [newValue retain];
+	}
+}
+{% endhighlight %}</p>
+<h3 id="3weak--unsafe_unretained">3.weak &amp; unsafe_unretained</h3>
+<p>weak和unsafe_unretained都是对对象的弱引用，用这两个修饰符的引用计数不会有任何改变，区别在于当该引用所指向的内存空间引用计数为0，内存被释放的时候，weak会将属性值置为nil，而unsafe_unretained不会，这时候unsafe_unretained修饰的属性值变成了一个野指针，即一个指针指向一个不存在的内存地址。</p>
+<h3 id="4copy">4.copy</h3>
+<p>copy修饰的属性在赋值的时候，原来的值引用计数不会变化，而是将该值copy到新辟的内存空间中。
+{% highlight Objective-C %}
+@property (nonatomic, copy) id property;
+-(void)setProperty:(id)newValue {
+	if property != newValue {
+		[property release];
+		property = [newValue copy];
+	}
+}
+{% endhighlight %}
+注：  <br />
+1.copy和mutableCopy，copy是拷贝一个不可变的对象，mutableCopy是拷贝一个可变的对象。例如NSString对象的copy，得到的是一个不可变NSString对象，mutableCopy得到的是一个可变的NSMutableString对象，而NSMutableString对象的copy，得到的是一个不可变NSString对象，mutableCopy得到的是一个可变的NSMutableString对象。  <br />
+2.当属性为可变的对象类型，如果该属性用copy进行修饰，则生成的依然是不可变对象。</p>
+<h3 id="5assign">5.assign</h3>
+<p>使用assign修饰的属性不会对引用计数进行任何操作，一般用来修饰基本数据类型(NSInteger, CGFloat)和C数据类型(int, float, double)等。它的setter方法是直接赋值，不进行任何retain操作。</p>
+<h3 id="6readwrite--readonly">6.readwrite &amp; readonly</h3>
+<p>readwrite程序会自动创建setter和getter方法，而readonly则只会创建getter方法。如果没有申明，属性默认都是readwrite。</p>
+
+<h3 id="一般人我不告诉他">一般人我不告诉他</h3>
+<p>属性修饰符中，delegate一般用weak，block一般用copy，NSString、NSArray、NSDictionary一般用copy。  <br />
+delegate用weak的目的是避免代理在实现过程中引入自己而导致循环引用。  <br />
+block用copy修饰，把block从栈拷贝到堆中，防止被释放掉。另外，当block属性的实现被修改为另一个，那么旧的block将不再执行。</p>
+
+:ET

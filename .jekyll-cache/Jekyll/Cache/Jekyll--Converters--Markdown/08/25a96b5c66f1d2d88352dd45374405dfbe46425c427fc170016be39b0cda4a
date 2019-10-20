@@ -1,0 +1,5 @@
+I"<p>在iOS开发中，经常会出现时间一长，Provisioning Profiles越积越多，而且每次更新Provisioning Profiles，旧版的依然会存在着。  <br />
+作为有强迫症的我，无法忍受没有用的东西长期存留在我的电脑中，所以每隔一段时间我都会去清理依稀一下。  <br />
+清理方法很简单：  <br />
+首先，打开Finder–&gt;按住commnad+G，输入~/Library/MobileDevice/Provisioning Profiles，前往。所有的Provisioning Profiles都在这个文件夹里边。</p>
+:ET

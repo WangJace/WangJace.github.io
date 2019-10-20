@@ -1,0 +1,109 @@
+I"a<p>在iOS开发中，在展示统计数据的时候，时常会选择柱状图、线形图、饼状图的表现方式。而Core Plot就是一个用来绘制这些统计图的开源库。<br />
+在开始了解Core Plot这个库之前，要清楚Core Plot不仅可以用于iOS平台，也可以用于Mac OS X平台，所以呢，就会有一些限制：不能使用 <em>AppKit</em>。而<em>UIView</em> 相关的操作只能在 <em>CPTGraphHostingView</em> 中进行。绘图的实现使用了底层的 <em>Quartz 2D API</em>，并且使用 <em>Core Animation</em> 来创建 <em>layer</em> 层视图。<br />
+先通过一张图了解一下Core Plot库中主要类的层次结构：
+<img src="/assets/article_images/2018-11-16-Core Plot的使用(一)：基础篇01.png" alt="Core Plot库中类层次结构.png" />
+Core Plot库中主要类在视图中的层级关系：
+<img src="/assets/article_images/2018-11-16-Core Plot的使用(一)：基础篇02.png" alt="Core Plot库中类在视图中对应的层级关系.png" />
+Core Plot库中主要类在视图中的位置：
+<img src="/assets/article_images/2018-11-16-Core Plot的使用(一)：基础篇03.png" alt="Core Plot库中类在视图中的位置.png" /></p>
+
+<h4 id="-layers">• Layers</h4>
+<p><em>Core Plot</em> 声明了一个继承于 <em>CALayer</em> 的类 <em>CPTLayer</em>，这个类包含了绘制复杂的矢量图的方法和一些事件处理方法。</p>
+<pre><code class="language-OC">// 绘图方法
+-(void)renderAsVectorInContext:(CGContextRef)context;  
+-(void)recursivelyRenderInContext:(CGContextRef)context;  
+-(NSData *)dataForPDFRepresentationOfLayer;
+</code></pre>
+<p>当继承 <em>CPTLayer</em>，需要重写方法 <code>-renderAsVectorInContext:</code> 来绘制矢量图。</p>
+
+<h4 id="-graphs">• Graphs</h4>
+<p><em>Core Plot</em> 中最核心的类是 <em>CPTGraph</em>，是一个包含了 <em>CPTAxisSet、CPTPlotArea、CPTPlotSpace</em> 等属性的抽象类，而 <em>CPTXYGraph</em> 就是它的子类。</p>
+<pre><code class="language-Objective-C">@interface CPTGraph : CPTBorderedLayer
+    @property (nonatomic, readwrite, copy) NSString *title;  
+    @property (nonatomic, readwrite, copy) CPTTextStyle *titleTextStyle;  
+    @property (nonatomic, readwrite, assign) CGPoint titleDisplacement;  
+    @property (nonatomic, readwrite, assign) CPTRectAnchor titlePlotAreaFrameAnchor;  
+      
+    @property (nonatomic, readwrite, retain) CPTAxisSet *axisSet;  
+    @property (nonatomic, readwrite, retain) CPTPlotAreaFrame *plotAreaFrame;  
+    @property (nonatomic, readonly, retain) CPTPlotSpace *defaultPlotSpace;  
+    @property (nonatomic, readwrite, retain) NSArray *topDownLayerOrder;  
+      
+    @property (nonatomic, readwrite, retain) CPTLegend *legend;  
+    @property (nonatomic, readwrite, assign) CPTRectAnchor legendAnchor;  
+    @property (nonatomic, readwrite, assign) CGPoint legendDisplacement;  
+      
+    -(void)reloadData;  
+    -(void)reloadDataIfNeeded;  
+      
+    -(NSArray *)allPlots;  
+    -(CPTPlot *)plotAtIndex:(NSUInteger)index;  
+    -(CPTPlot *)plotWithIdentifier:(id &lt;NSCopying&gt;)identifier;  
+      
+    -(void)addPlot:(CPTPlot *)plot;   
+    -(void)addPlot:(CPTPlot *)plot toPlotSpace:(CPTPlotSpace *)space;  
+    -(void)removePlot:(CPTPlot *)plot;  
+    -(void)removePlotWithIdentifier:(id &lt;NSCopying&gt;)identifier;  
+    -(void)insertPlot:(CPTPlot *)plot atIndex:(NSUInteger)index;  
+    -(void)insertPlot:(CPTPlot *)plot atIndex:(NSUInteger)index intoPlotSpace:(CPTPlotSpace *)space;  
+      
+    -(NSArray *)allPlotSpaces;  
+    -(CPTPlotSpace *)plotSpaceAtIndex:(NSUInteger)index;  
+    -(CPTPlotSpace *)plotSpaceWithIdentifier:(id &lt;NSCopying&gt;)identifier;  
+      
+    -(void)addPlotSpace:(CPTPlotSpace *)space;   
+    -(void)removePlotSpace:(CPTPlotSpace *)plotSpace;  
+      
+    -(void)applyTheme:(CPTTheme *)theme;  
+@end
+</code></pre>
+<h4 id="-plot-area">• Plot Area</h4>
+<p><em>Plot Area</em> 是展示数据的区域(柱状图、线形图、饼状图等)。每个 <em>graph</em> 有且仅有一个 <em>plot area</em>，即 <em>CPTGraph</em> 中的 <em>CPTPlotArea</em> 属性。而在 <em>Plot Area</em> 外边还有一个 <em>CPTPlotAreaFrame</em> ，它的作用就是设置 <em>plot area</em> 的外边距。</p>
+<h4 id="-plot-spaces">• Plot Spaces</h4>
+<p><em>Plot Space</em> 定义了 <em>plot area</em> 中坐标系与数据之间的映射关系。一个 <em>CPTPlotSpace</em> 的子类必须包含物理坐标(即View上的坐标点)与数据坐标相互转换的方法。</p>
+<pre><code class="language-Objective-C">-(CGPoint)plotAreaViewPointForPlotPoint:(NSDecimal *)plotPoint;  
+-(CGPoint)plotAreaViewPointForDoublePrecisionPlotPoint:(double *)plotPoint;  
+-(void)plotPoint:(NSDecimal *)plotPoint forPlotAreaViewPoint:(CGPoint)point;  
+-(void)doublePrecisionPlotPoint:(double *)plotPoint forPlotAreaViewPoint:(CGPoint)point;
+</code></pre>
+<p><em>plot space</em> 决定了每个 <em>CPTPlot</em> 将会绘制在 <em>plot area</em> 中的哪些位置上。每个 <em>CPTPlot</em> 都关联着一个 <em>plot space</em>，而一个 <em>graph</em> 可以包含多个 <em>CPTPlot</em>，比如一个线形图可以有多条线形，或者是一个图表里面既有柱状图又有线形图。</p>
+<h4 id="-plots">• Plots</h4>
+<p><em>Plot</em> 就是数据在图表上的呈现。它和 <em>UITableView</em> 有点类似，同样需要设置 <em>dataSource</em>，通过实现 <em>CPTPlotDataSource</em> 代理的方法完成数据解析绘制成图表。</p>
+<pre><code class="language-Objective-C">@protocol CPTPlotDataSource &lt;NSObject&gt;  
+  
+-(NSUInteger)numberOfRecords;   
+  
+@optional  
+  
+// Implement one of the following  
+-(NSArray *)numbersForPlot:(CPTPlot *)plot field:(NSUInteger)fieldEnum recordIndexRange:(NSRange)indexRange;  
+-(NSNumber *)numberForPlot:(CPTPlot *)plot field:(NSUInteger)fieldEnum recordIndex:(NSUInteger)index;   
+  
+@end 
+</code></pre>
+<p>可以理解 <em>field</em> 相当于一个 <em>tableView</em>，而 <em>recoreIndex</em> 就相当于 <em>tableView</em> 中的 <em>indexPath.row</em>。比如说 <em>CPTScatterPlot</em>，一个坐标点相当于 <em>tableView</em> 中的 <em>indexPath.row</em>，而一个坐标点又是由 <em>x</em> 值和 <em>y</em> 值组成。</p>
+<pre><code class="language-Objective-C">typedef enum _CPTScatterPlotField {  
+    CPTScatterPlotFieldX,  
+    CPTScatterPlotFieldY  
+} CPTScatterPlotField;
+</code></pre>
+<p>根据 <em>CPTScatterPlotField</em> 的枚举值，在代理方法中将相应的 <em>x</em> 值和 <em>y</em> 值返回。<br />
+<em>plot</em> 不仅可以使用 <em>CPTPlotDataSource</em> 代理方法，还可以用数据绑定的方式。</p>
+<pre><code class="language-Objective-C">CPTGraph *graph = ...;  
+CPTScatterPlot *boundLinePlot = [[[CPTScatterPlot alloc] initWithFrame:CGRectZero] autorelease];  
+boundLinePlot.identifier = @"Bindings Plot";  
+boundLinePlot.dataLineStyle.lineWidth = 2.f;  
+[graph addPlot:boundLinePlot];  
+[boundLinePlot bind:CPTScatterPlotBindingXValues toObject:self withKeyPath:@"arrangedObjects.x" options:nil];  
+[boundLinePlot bind:CPTScatterPlotBindingYValues toObject:self withKeyPath:@"arrangedObjects.y" options:nil];
+</code></pre>
+<h4 id="-axis">• Axis</h4>
+<p><em>Axis</em> 就是图表中的坐标轴(刻度尺标题、坐标轴标题)。一般一个图标会有两个 <em>Axis</em>，即 <em>CPTAxis</em>，这些 <em>axis</em> 都包含在 * CPTAxisSet* 中。而刻度尺标题则通过 <em>CPTAxisLabel</em> 来实现。</p>
+
+<p>相关文章：<br />
+<a href="http://blog.wangjace.site/2018/11/Core-Plot%E7%9A%84%E4%BD%BF%E7%94%A8(%E4%BA%8C)-%E6%9F%B1%E7%8A%B6%E5%9B%BE/">Core Plot的使用(二)：柱状图</a><br />
+<a href="http://blog.wangjace.site/2018/11/Core-Plot%e7%9a%84%e4%bd%bf%e7%94%a8(%e4%b8%89)-%e7%ba%bf%e5%bd%a2%e5%9b%be/">Core Plot的使用(三)：线形图</a></p>
+
+<p>参考：<a href="https://github.com/core-plot/core-plot/wiki/High-Level-Design-Overview">Core-Plot High Level Design Overview</a></p>
+
+:ET

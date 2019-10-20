@@ -1,0 +1,5 @@
+I"<ul>
+  <li>iOS APP开启iTunes文件共享  <br />
+在工程的Info.plist文件中添加支持iTunes文件共享的Key:Application supports iTunes file sharing，并将值设为YES，这样APP中Docunmets文件夹的文件就可以通过iTunes共享了。</li>
+</ul>
+:ET
